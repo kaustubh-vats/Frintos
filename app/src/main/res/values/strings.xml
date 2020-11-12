@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">Frintos</string>
+    <string name="your_good_name_goes_here">Your Good name goes here</string>
+    <string name="may_i_ask_your_phone_number">May I ask your Phone number</string>
+    <string name="phone">Phone</string>
+    <string name="username">Display Name</string>
+    <string name="login">Let\'s Go</string>
+    <string name="phoneui">Can I have Your Phone number Please &#8230;\nElse if you don\'t trust me you can continue with</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="otp">OTP</string>
+    <string name="otpui">I Don\'t trust anyone &#8230; Please verify your Identity</string>
+    <string name="signup">Create Trust</string>
+    <string name="logout">Logout</string>
+    <string name="search_friends">Search Friends</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="status_default">Proud Frintoser</string>
+    <string name="change_status">Change Status</string>
+    <string name="update_picture">Update Picture</string>
+    <string name="countrycode">+91</string>
+    <string name="search">Search For New Frint</string>
+    <string name="requests">Requests</string>
+    <string name="chats">Chats</string>
+    <string name="toss">Toss</string>
+    <string name="download_image">Download Image</string>
+    <string name="remove_image">Remove Image</string>
+    <string name="send_request">Send Request</string>
+    <string name="cancel_req">Cancel Request</string>
+    <string name="accept_request">Accept request</string>
+    <string name="remove_friend">Remove Friend</string>
+    <string name="decline_request">Decline Request</string>
+    <string name="upvotes">Upvotes</string>
+    <string name="zero">0</string>
+    <string name="frints">Frints</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_friends">You Don\'t have any friends to chat with</string>
+    <string name="no_toss">You Don\'t Have any Toss</string>
+    <string name="chat_message">Chat Message</string>
+    <string name="time">time</string>
+    <string name="active">Active now &#8230;</string>
+    <string name="upvote">Upvote</string>
+    <string name="report">Report</string>
+    <string name="toss_details">You can write any thought or story here It will be forwarded to any random person on Frintos</string>
+    <string name="toss_hint">Enter your thoughts here&#8230; Share with random persons</string>
+    <string name="send_toss">Send Toss</string>
+</resources>

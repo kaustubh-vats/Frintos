@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="@string/requests" android:id="@+id/requests" android:icon="@drawable/ic_person_add_black_24dp" app:showAsAction="ifRoom"/>
+    <item android:title="@string/chats" android:state_pressed="true" android:icon="@drawable/ic_chat_bubble_black_24dp" android:id="@+id/chats" app:showAsAction="ifRoom"/>
+    <item android:title="@string/toss" android:id="@+id/toss" android:icon="@drawable/ic_camera_black_24dp" app:showAsAction="ifRoom"/>
+</menu>

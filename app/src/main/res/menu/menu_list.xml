@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/account_settings"
+        android:title="@string/account_settings"
+        android:icon="@drawable/ic_account_circle_black_24dp"/>
+    <item android:id="@+id/all_users"
+        android:title="Find Frints"/>
+
+    <item
+        android:id="@+id/logout"
+        android:title="@string/logout"
+        android:icon="@drawable/ic_power_settings_new_black_24dp"/>
+</menu>

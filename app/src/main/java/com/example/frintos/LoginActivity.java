@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -26,14 +27,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -83,13 +84,13 @@ public class LoginActivity extends AppCompatActivity {
                     String completePhone=editText2.getText().toString()+phoneNumber;
                     progressBar.setVisibility(View.VISIBLE);
                     button.setEnabled(false);
-                    PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                            completePhone,
-                            60,
-                            TimeUnit.SECONDS,
-                            LoginActivity.this,
-                            callbacks
-                    );
+                    PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
+                                    .setPhoneNumber(completePhone)
+                                    .setTimeout(60L, TimeUnit.SECONDS)
+                                    .setActivity(LoginActivity.this)
+                                    .setCallbacks(callbacks)
+                                    .build();
+                    PhoneAuthProvider.verifyPhoneNumber(options);
                 }
             }
         });
@@ -107,14 +108,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onCodeSent(@NonNull final String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(s, forceResendingToken);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
                         Intent intent= new Intent(LoginActivity.this,otpcheck.class);
                         intent.putExtra("credentials",s);
                         intent.putExtra("name",editText.getText().toString());
                         startActivity(intent);
-                    }
                 }, 5000);
             }
         };
@@ -138,55 +136,49 @@ public class LoginActivity extends AppCompatActivity {
                                         final String datathumb=dataSnapshot.child("thumb").getValue().toString();
                                         final String datastatus=dataSnapshot.child("status").getValue().toString();
                                         final String dataupvotes=dataSnapshot.child("upvotes").getValue().toString();
-                                        FirebaseInstanceId.getInstance().getInstanceId()
-                                                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                                                        if (!task.isSuccessful()) {
-                                                            Log.w("failedInstance", "getInstanceId failed", task.getException());
-                                                            return;
-                                                        }
+                                        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task1 -> {
+                                            if (!task1.isSuccessful()) {
+                                                Log.w("failedInstance", "getInstanceId failed", task.getException());
+                                                return;
+                                            }
 
-                                                        // Get new Instance ID token
-                                                        String token = task.getResult().getToken();
-                                                        deviceToken = token;
-                                                        // Log and toast
-                                                        updateToken(dataname,dataimage,datathumb,datastatus,deviceToken,dataupvotes);
-                                                    }
-                                                });
+                                            // Get new Instance ID token
+                                            deviceToken = task1.getResult();
+                                            // Log and toast
+                                            updateToken(dataname,dataimage,datathumb,datastatus,deviceToken,dataupvotes);
+
+                                        });
                                     }
                                     else {
 
-                                        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
-                                            @Override
-                                            public void onSuccess(InstanceIdResult instanceIdResult) {
-                                                deviceToken=instanceIdResult.getToken();
-                                                HashMap<String,String>userdatamap= new HashMap<>();
-                                                userdatamap.put("name",editText.getText().toString());
-                                                userdatamap.put("online","true");
-                                                userdatamap.put("status", "Proud Frintoser");
-                                                userdatamap.put("picture","default");
-                                                userdatamap.put("thumb","default");
-                                                userdatamap.put("token",deviceToken);
-                                                userdatamap.put("upvotes","0");
-                                                mDatabase.setValue(userdatamap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if(task.isSuccessful())
-                                                        {
-                                                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                            startActivity(intent);
-                                                            finish();
+                                        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(
+                                                s -> {
+                                                    deviceToken=s;
+                                                    HashMap<String,String>userdatamap= new HashMap<>();
+                                                    userdatamap.put("name",editText.getText().toString());
+                                                    userdatamap.put("online","true");
+                                                    userdatamap.put("status", "Proud Frintoser");
+                                                    userdatamap.put("picture","default");
+                                                    userdatamap.put("thumb","default");
+                                                    userdatamap.put("token",deviceToken);
+                                                    userdatamap.put("upvotes","0");
+                                                    mDatabase.setValue(userdatamap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task12) {
+                                                            if(task12.isSuccessful())
+                                                            {
+                                                                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                                startActivity(intent);
+                                                                finish();
+                                                            }
+                                                            else
+                                                            {
+                                                                Toast.makeText(LoginActivity.this, "Unknown Error Occurred", Toast.LENGTH_SHORT).show();
+                                                            }
                                                         }
-                                                        else
-                                                        {
-                                                            Toast.makeText(LoginActivity.this, "Unknown Error Occurred", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
+                                                    });
+                                                }).addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
                                                 Toast.makeText(LoginActivity.this, "Error while generating Token", Toast.LENGTH_SHORT).show();

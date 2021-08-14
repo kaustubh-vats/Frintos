@@ -31,6 +31,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class DisplayThisUser extends AppCompatActivity {
     ImageView imageView,imageView1;
@@ -44,7 +45,7 @@ public class DisplayThisUser extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         setContentView(R.layout.activity_display_this_user);
         uid=getIntent().getStringExtra("uid");
         imageView=findViewById(R.id.imageView7);
@@ -68,7 +69,25 @@ public class DisplayThisUser extends AppCompatActivity {
         friendRequestRefrence=FirebaseDatabase.getInstance().getReference().child("friend_req");
         friendRefrence=FirebaseDatabase.getInstance().getReference().child("friends");
         databaseReference.keepSynced(true);
-        friendRequestRefrence.child(curUid).addListenerForSingleValueEvent(new ValueEventListener() {
+        friendRefrence.child(curUid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child(uid).exists())
+                {
+                    currState="Friends";
+                    button.setText(R.string.remove_friend);
+                }
+                else{
+                    currState="notFriends";
+                    button.setText(R.string.send_request);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        friendRequestRefrence.child(curUid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String type="";
@@ -92,21 +111,7 @@ public class DisplayThisUser extends AppCompatActivity {
                 Toast.makeText(DisplayThisUser.this, "Database error please try again", Toast.LENGTH_SHORT).show();
             }
         });
-        friendRefrence.child(curUid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.child(uid).exists())
-                {
-                    currState="Friends";
-                    button.setText(R.string.remove_friend);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        friendRefrence.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        friendRefrence.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
@@ -121,7 +126,7 @@ public class DisplayThisUser extends AppCompatActivity {
 
             }
         });
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userd=snapshot.getValue(usersData.class);
@@ -157,41 +162,7 @@ public class DisplayThisUser extends AppCompatActivity {
     public void sentReq(View view){
         button.setEnabled(false);
         progressBar1.setVisibility(View.VISIBLE);
-        if(currState.equals("notFriends"))
-        {
-            friendRequestRefrence.child(curUid).child(uid).child("type").setValue("sent").addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful())
-                    {
-                        friendRequestRefrence.child(uid).child(curUid).child("type").setValue("received").addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(DisplayThisUser.this, "Request Sent", Toast.LENGTH_SHORT).show();
-                                progressBar1.setVisibility(View.INVISIBLE);
-                                currState="requested";
-                                button.setText(R.string.cancel_req);
-                                button.setEnabled(true);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                progressBar1.setVisibility(View.INVISIBLE);
-                                button.setEnabled(true);
-                                Toast.makeText(DisplayThisUser.this, "Failed to sent request", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                    else
-                    {
-                        Toast.makeText(DisplayThisUser.this, "Failed to sent request", Toast.LENGTH_SHORT).show();
-                        progressBar1.setVisibility(View.INVISIBLE);
-                        button.setEnabled(true);
-                    }
-                }
-            });
-        }
-        else if(currState.equals("requested"))
+        if(currState.equals("requested"))
         {
             friendRequestRefrence.child(curUid).child(uid).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -228,7 +199,7 @@ public class DisplayThisUser extends AppCompatActivity {
         }
         else if(currState.equals("received")){
             final String curdate = DateFormat.getDateTimeInstance().format(new Date());
-            final Map userMap = new HashMap();
+            HashMap<String,Object> userMap = new HashMap<>();
             userMap.put("joined",curdate);
             userMap.put("last","");
             userMap.put("timestamp", ServerValue.TIMESTAMP);
@@ -290,6 +261,39 @@ public class DisplayThisUser extends AppCompatActivity {
                         button.setEnabled(true);
                         progressBar1.setVisibility(View.INVISIBLE);
                         Toast.makeText(DisplayThisUser.this, "Failed to accept request", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }else if(currState.equals("notFriends"))
+        {
+            friendRequestRefrence.child(curUid).child(uid).child("type").setValue("sent").addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful())
+                    {
+                        friendRequestRefrence.child(uid).child(curUid).child("type").setValue("received").addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(DisplayThisUser.this, "Request Sent", Toast.LENGTH_SHORT).show();
+                                progressBar1.setVisibility(View.INVISIBLE);
+                                currState="requested";
+                                button.setText(R.string.cancel_req);
+                                button.setEnabled(true);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                progressBar1.setVisibility(View.INVISIBLE);
+                                button.setEnabled(true);
+                                Toast.makeText(DisplayThisUser.this, "Failed to sent request", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        Toast.makeText(DisplayThisUser.this, "Failed to sent request", Toast.LENGTH_SHORT).show();
+                        progressBar1.setVisibility(View.INVISIBLE);
+                        button.setEnabled(true);
                     }
                 }
             });

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,28 +57,24 @@ public class RequestFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration=new DividerItemDecoration(view.getContext(),DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(view.getContext(), R.drawable.recycler_decor)));
         recyclerView.addItemDecoration(dividerItemDecoration);
-        friendrequestdatabase.keepSynced(true);
         databaseReference.keepSynced(true);
         usersDataList=new ArrayList<>();
         friendrequestdatabase.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                usersDataList=new ArrayList<>();
                 if(snapshot.exists())
                 {
-                    usersDataList=new ArrayList<>();
                     for(DataSnapshot ds: snapshot.getChildren())
                     {
                         if(ds.child("type").getValue().toString().equals("received"))
                         {
                             final String userId=ds.getKey();
                             if (userId != null) {
-                                databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                databaseReference.child(userId).addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        if(!snapshot.exists())
-                                        {
-                                            progressBar.setVisibility(View.INVISIBLE);
-                                        }
+                                        progressBar.setVisibility(View.INVISIBLE);
                                         usersData ud=snapshot.getValue(usersData.class);
                                         MyUserData myUserData=new MyUserData();
                                         myUserData.setName(ud.getName());
@@ -103,6 +100,8 @@ public class RequestFragment extends Fragment {
                 else
                 {
                     progressBar.setVisibility(View.INVISIBLE);
+                    setView(usersDataList,view);
+                    textView.setVisibility(View.VISIBLE);
                 }
             }
 

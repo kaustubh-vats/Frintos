@@ -30,8 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
 
@@ -90,10 +89,10 @@ public class otpcheck extends AppCompatActivity {
                                     final String datathumb=dataSnapshot.child("thumb").getValue().toString();
                                     final String datastatus=dataSnapshot.child("status").getValue().toString();
                                     final String dataupvotes=dataSnapshot.child("upvotes").getValue().toString();
-                                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+                                    FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
                                         @Override
-                                        public void onSuccess(InstanceIdResult instanceIdResult) {
-                                            deviceToken=instanceIdResult.getToken();
+                                        public void onSuccess(String s) {
+                                            deviceToken=s;
                                             updateToken(dataname,dataimage,datathumb,datastatus,deviceToken,dataupvotes);
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
@@ -103,10 +102,10 @@ public class otpcheck extends AppCompatActivity {
                                         }
                                     });
                                 } else {
-                                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+                                    FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
                                         @Override
-                                        public void onSuccess(InstanceIdResult instanceIdResult) {
-                                            deviceToken=instanceIdResult.getToken();
+                                        public void onSuccess(String instanceIdResult) {
+                                            deviceToken=instanceIdResult;
                                             HashMap<String, String> userdatamap = new HashMap<>();
                                             userdatamap.put("name", name);
                                             userdatamap.put("online","true");

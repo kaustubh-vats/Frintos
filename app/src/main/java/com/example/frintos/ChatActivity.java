@@ -2,6 +2,7 @@ package com.example.frintos;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -256,116 +258,142 @@ public class ChatActivity extends AppCompatActivity {
                 String fromId = messageList.get(position).getFrom();
                 if(myuid.equals(fromId))
                 {
-                    progressBar.setVisibility(View.VISIBLE);
-                    imageView2.setEnabled(false);
-                    Toast.makeText(ChatActivity.this, "Deleting Please wait a moment", Toast.LENGTH_SHORT).show();
-                    chatRefrence.child("chats").child(myuid).child(uid).child(messageId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+                    builder.setMessage("This message will be deleted permanently and can't be retrieved back. Do you wish to continue");
+                    builder.setTitle("Do you want to delete this mesaage");
+                    builder.setCancelable(true);
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful())
-                            {
-                                chatRefrence.child("chats").child(uid).child(myuid).child(messageId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if(task.isSuccessful())
-                                        {
-                                            long lastTime=messageList.get(position).getTimestamp();
-                                            messageList.remove(position);
-                                            if(messageList.isEmpty())
-                                            {
-                                                final Map<String, Object> lastMap = new HashMap<String, Object>();
-                                                lastMap.put("last","");
-                                                lastMap.put("timestamp",lastTime);
-                                                chatRefrence.child("friends").child(uid).child(myuid).updateChildren(lastMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if(task.isSuccessful())
-                                                        {
-                                                            chatRefrence.child("friends").child(myuid).child(uid).updateChildren(lastMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                @Override
-                                                                public void onComplete(@NonNull Task<Void> task) {
-                                                                    if(task.isSuccessful())
-                                                                    {
-                                                                        progressBar.setVisibility(View.INVISIBLE);
-                                                                        imageView2.setEnabled(true);
-                                                                        Toast.makeText(ChatActivity.this, "Message Deleted", Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        progressBar.setVisibility(View.INVISIBLE);
-                                                                        imageView2.setEnabled(true);
-                                                                        Toast.makeText(ChatActivity.this, "Failed to delete", Toast.LENGTH_SHORT).show();
-                                                                    }
+                        public void onClick(DialogInterface dialog, int which) {
+                            progressBar.setVisibility(View.VISIBLE);
+                            imageView2.setEnabled(false);
+                            Toast.makeText(ChatActivity.this, "Deleting Please wait a moment", Toast.LENGTH_SHORT).show();
+                            chatRefrence.child("chats").child(myuid).child(uid).child(messageId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful())
+                                    {
+                                        chatRefrence.child("chats").child(uid).child(myuid).child(messageId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful())
+                                                {
+                                                    long lastTime=messageList.get(position).getTimestamp();
+                                                    messageList.remove(position);
+                                                    if(messageList.isEmpty())
+                                                    {
+                                                        final Map<String, Object> lastMap = new HashMap<String, Object>();
+                                                        lastMap.put("last","");
+                                                        lastMap.put("timestamp",lastTime);
+                                                        chatRefrence.child("friends").child(uid).child(myuid).updateChildren(lastMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if(task.isSuccessful())
+                                                                {
+                                                                    chatRefrence.child("friends").child(myuid).child(uid).updateChildren(lastMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                                            if(task.isSuccessful())
+                                                                            {
+                                                                                progressBar.setVisibility(View.INVISIBLE);
+                                                                                imageView2.setEnabled(true);
+                                                                                Toast.makeText(ChatActivity.this, "Message Deleted", Toast.LENGTH_SHORT).show();
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                progressBar.setVisibility(View.INVISIBLE);
+                                                                                imageView2.setEnabled(true);
+                                                                                Toast.makeText(ChatActivity.this, "Failed to delete", Toast.LENGTH_SHORT).show();
+                                                                            }
+                                                                        }
+                                                                    });
                                                                 }
-                                                            });
-                                                        }
-                                                        else
-                                                        {
-                                                            progressBar.setVisibility(View.INVISIBLE);
-                                                            imageView2.setEnabled(true);
-                                                            Toast.makeText(ChatActivity.this, "Failed to delete", Toast.LENGTH_SHORT).show();
-                                                        }
+                                                                else
+                                                                {
+                                                                    progressBar.setVisibility(View.INVISIBLE);
+                                                                    imageView2.setEnabled(true);
+                                                                    Toast.makeText(ChatActivity.this, "Failed to delete", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
+                                                        });
                                                     }
-                                                });
-                                            }
-                                            else
-                                            {
-                                                lastTime=messageList.get(messageList.size()-1).getTimestamp();
-                                                final String Lastmsg=messageList.get(messageList.size()-1).getMessage();
+                                                    else
+                                                    {
+                                                        lastTime=messageList.get(messageList.size()-1).getTimestamp();
+                                                        final String Lastmsg=messageList.get(messageList.size()-1).getMessage();
 
-                                                final Map<String, Object> lastMap = new HashMap<String, Object>();
-                                                lastMap.put("last",Lastmsg);
-                                                lastMap.put("timestamp",lastTime);
-                                                chatRefrence.child("friends").child(uid).child(myuid).updateChildren(lastMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                       if(task.isSuccessful())
-                                                       {
-                                                           chatRefrence.child("friends").child(myuid).child(uid).updateChildren(lastMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                               @Override
-                                                               public void onComplete(@NonNull Task<Void> task) {
-                                                                   if(task.isSuccessful())
-                                                                   {
-                                                                       progressBar.setVisibility(View.INVISIBLE);
-                                                                       imageView2.setEnabled(true);
-                                                                       Toast.makeText(ChatActivity.this, "Message Deleted", Toast.LENGTH_SHORT).show();
-                                                                   }else
-                                                                   {
-                                                                       progressBar.setVisibility(View.INVISIBLE);
-                                                                       imageView2.setEnabled(true);
-                                                                       Toast.makeText(ChatActivity.this, "Failed to delete", Toast.LENGTH_SHORT).show();
-                                                                   }
-                                                               }
-                                                           });
-                                                       }
-                                                       else
-                                                       {
-                                                           progressBar.setVisibility(View.INVISIBLE);
-                                                           imageView2.setEnabled(true);
-                                                           Toast.makeText(ChatActivity.this, "Failed to delete", Toast.LENGTH_SHORT).show();
-                                                       }
+                                                        final Map<String, Object> lastMap = new HashMap<String, Object>();
+                                                        lastMap.put("last",Lastmsg);
+                                                        lastMap.put("timestamp",lastTime);
+                                                        chatRefrence.child("friends").child(uid).child(myuid).updateChildren(lastMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if(task.isSuccessful())
+                                                                {
+                                                                    chatRefrence.child("friends").child(myuid).child(uid).updateChildren(lastMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                                            if(task.isSuccessful())
+                                                                            {
+                                                                                progressBar.setVisibility(View.INVISIBLE);
+                                                                                imageView2.setEnabled(true);
+                                                                                Toast.makeText(ChatActivity.this, "Message Deleted", Toast.LENGTH_SHORT).show();
+                                                                            }else
+                                                                            {
+                                                                                progressBar.setVisibility(View.INVISIBLE);
+                                                                                imageView2.setEnabled(true);
+                                                                                Toast.makeText(ChatActivity.this, "Failed to delete", Toast.LENGTH_SHORT).show();
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                }
+                                                                else
+                                                                {
+                                                                    progressBar.setVisibility(View.INVISIBLE);
+                                                                    imageView2.setEnabled(true);
+                                                                    Toast.makeText(ChatActivity.this, "Failed to delete", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
+                                                        });
                                                     }
-                                                });
+                                                    chatAdapter.notifyDataSetChanged();
+                                                }
+                                                else
+                                                {
+                                                    progressBar.setVisibility(View.INVISIBLE);
+                                                    imageView2.setEnabled(true);
+                                                    chatAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                                                    Toast.makeText(ChatActivity.this, "Failed to delete", Toast.LENGTH_SHORT).show();
+                                                }
                                             }
-                                            chatAdapter.notifyDataSetChanged();
-                                        }
-                                        else
-                                        {
-                                            progressBar.setVisibility(View.INVISIBLE);
-                                            imageView2.setEnabled(true);
-                                            Toast.makeText(ChatActivity.this, "Failed to delete", Toast.LENGTH_SHORT).show();
-                                        }
+                                        });
                                     }
-                                });
-                            }
-                            else
-                            {
-                                progressBar.setVisibility(View.INVISIBLE);
-                                imageView2.setEnabled(true);
-                                Toast.makeText(ChatActivity.this, "Failed to delete", Toast.LENGTH_SHORT).show();
-                            }
+                                    else
+                                    {
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                        imageView2.setEnabled(true);
+                                        chatAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                                        Toast.makeText(ChatActivity.this, "Failed to delete", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         }
                     });
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            chatAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                            dialog.cancel();
+                        }
+                    });
+                    builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            chatAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                        }
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
                 }
                 else
                 {

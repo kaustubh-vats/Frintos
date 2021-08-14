@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -34,7 +35,7 @@ public class Welcome extends AppCompatActivity {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         String uid= firebaseUser.getUid();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         setContentView(R.layout.activity_welcome);
         textView=findViewById(R.id.textView4);
         imageView=findViewById(R.id.imageView);
@@ -63,14 +64,11 @@ public class Welcome extends AppCompatActivity {
             }
         });
         int TIME_OUT = 2000;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent=new Intent(Welcome.this,MainActivity.class);
-                intent.putExtra("flag",true);
-                startActivity(intent);
-                finish();
-            }
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Intent intent1 =new Intent(Welcome.this,MainActivity.class);
+            intent1.putExtra("flag",true);
+            startActivity(intent1);
+            finish();
         }, TIME_OUT);
     }
 }

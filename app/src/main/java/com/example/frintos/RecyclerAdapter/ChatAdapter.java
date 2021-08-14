@@ -138,9 +138,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
                     Calendar calendar=Calendar.getInstance();
                     calendar.setTimeInMillis(chatModelList.get(getAdapterPosition()).getTimestamp());
                     String[] months={"January","February","March","April","May","June","July","August","September","October","November","December"};
-                    String[] days={"Saturday","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday"};
+                    String[] days={"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
                     String[] am_pm={"AM","PM"};
-                    String messageInfo = days[calendar.get(Calendar.DAY_OF_WEEK)]+", "+months[calendar.get(Calendar.MONTH)]+" "+calendar.get(Calendar.DAY_OF_MONTH)+" "+calendar.get(Calendar.YEAR)+"\n"+calendar.get(Calendar.HOUR)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND)+" "+am_pm[calendar.get(Calendar.AM_PM)];
+                    System.out.println(calendar.get(Calendar.DAY_OF_WEEK));
+                    String messageInfo = days[calendar.get(Calendar.DAY_OF_WEEK)-1]+", "+months[calendar.get(Calendar.MONTH)]+" "+calendar.get(Calendar.DAY_OF_MONTH)+" "+calendar.get(Calendar.YEAR)+"\n"+calendar.get(Calendar.HOUR)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND)+" "+am_pm[calendar.get(Calendar.AM_PM)];
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setMessage(messageInfo);
                     builder.setTitle("Message Info");

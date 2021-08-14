@@ -105,7 +105,7 @@ public class TossWritingActivity extends AppCompatActivity {
       //  Toast.makeText(this, ""+userKeys.size(), Toast.LENGTH_SHORT).show();
         int r = random.nextInt(userKeys.size());
         final MyUserData myUserData = userKeys.get(r);
-        Map tossMap = new HashMap();
+        HashMap<String,Object> tossMap = new HashMap<>();
         tossMap.put("toss_mes", message);
         tossMap.put("sender", udata.getName());
         tossMap.put("picture", udata.getPicture());

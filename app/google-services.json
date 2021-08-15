@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:483210534252:android:9f7f146b0eac78c4a26749",
+        "mobilesdk_app_id": "1:483210534252:android:6ab106b9c23c1daaa26749",
         "android_client_info": {
           "package_name": "com.example.frintos"
         }
       },
       "oauth_client": [
         {
-          "client_id": "483210534252-u3h8d9v0afh5l1mbe0rsr43k79p5ud33.apps.googleusercontent.com",
+          "client_id": "483210534252-lf88ebo2q7fdrg7a3i9aa14hlr7gl9hg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.frintos",
-            "certificate_hash": "f0aeef843cc3d1c906cd43cf08d44c3779509da8"
+            "certificate_hash": "fbf0c06a97e7d87e5fbc3f2808204b91c09b9820"
           }
         },
         {

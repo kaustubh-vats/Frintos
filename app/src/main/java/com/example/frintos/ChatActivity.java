@@ -149,20 +149,20 @@ public class ChatActivity extends AppCompatActivity {
                         } else {
                             lastsn = weeks + " week ago";
                         }
-                    } else if ((numOfDayPass >= 30) && (numOfDayPass < 90)) {
+                    } else if ((numOfDayPass >= 30) && (numOfDayPass < 365)) {
                         int months = (int) numOfDayPass / 30;
                         if (months > 1) {
                             lastsn = months + " months ago";
                         } else {
                             lastsn = months + " month ago";
                         }
-                    } else if ((numOfDayPass >= 360) && (numOfDayPass < 1080)) {
-                        int years = (int) numOfDayPass / 360;
+                    } else if (numOfDayPass >= 365) {
+                        int years = (int) numOfDayPass / 365;
 
                         if (years > 1) {
-                            lastsn = years + " years ago";
+                            lastsn = "few years ago";
                         } else {
-                            lastsn = years + " year ago";
+                            lastsn = "1 year ago";
                         }
                     } else {
                         lastsn = online;

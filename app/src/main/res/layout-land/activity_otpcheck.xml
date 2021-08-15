@@ -36,7 +36,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="300dp"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/constraintLayout3">
@@ -45,10 +45,9 @@
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="85dp"
+            android:layout_marginStart="25dp"
             android:text="@string/enter_otp"
-            app:layout_constraintStart_toStartOf="@+id/editText5"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
@@ -75,7 +74,7 @@
         android:id="@+id/button2"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:layout_below="@+id/constraintLayout2"
         android:background="@drawable/buttonbg"
         android:foreground="?android:attr/selectableItemBackground"

@@ -3,6 +3,8 @@ package com.example.frintos;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,6 +21,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.frintos.Model.usersData;
+import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.github.dhaval2404.imagepicker.listener.DismissListener;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,14 +36,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 
 public class DisplayUser extends AppCompatActivity {
-    private static final int GALLERY_PICK=1;
     TextView textView;
     EditText editText;
     Button button,buttton1;
@@ -104,10 +106,11 @@ public class DisplayUser extends AppCompatActivity {
     }
     public void updatePicture(View view){
         image_progressbar.setVisibility(View.VISIBLE);
-        Intent gallery= new Intent();
-        gallery.setType("image/*");
-        gallery.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(gallery,"Choose New Profile Photo"),GALLERY_PICK);
+
+        ImagePicker.with(this)
+                .cropSquare()
+                .maxResultSize(1080, 1080)
+                .start();
     }
 
     public void updateStatus(View view) {
@@ -139,87 +142,82 @@ public class DisplayUser extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         image_progressbar.setVisibility(View.INVISIBLE);
-        if(requestCode==GALLERY_PICK && resultCode==RESULT_OK){
-            Uri imgUri = data.getData();
-            CropImage.activity(imgUri).setAspectRatio(1,1).start(this);
-            image_progressbar.setVisibility(View.INVISIBLE);
-        }
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            image_progressbar.setVisibility(View.VISIBLE);
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                final Uri resultUri = result.getUri();
-                File thumb_file=new File(resultUri.getPath());
-                Bitmap resized = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(thumb_file.getPath()), 200, 200);
-                ByteArrayOutputStream baos= new ByteArrayOutputStream();
-                resized.compress(Bitmap.CompressFormat.JPEG,70,baos);
-                byte[] thumb_byte=baos.toByteArray();
-                final StorageReference thumb_refrence=mStorageRef.child("ProfilePictures").child("thumbs").child(uid+".jpg");
-                final StorageReference storageReference=mStorageRef.child("ProfilePictures").child(uid+".jpg");
-                final UploadTask uploadTask = storageReference.putFile(resultUri);
-                UploadTask uploadTask1=thumb_refrence.putBytes(thumb_byte);
-                Task<Uri> urlTask1 = uploadTask1.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                    @Override
-                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                        if (!task.isSuccessful()) {
-                            throw task.getException();
-                        }
-                        return thumb_refrence.getDownloadUrl();
+
+        if (resultCode == Activity.RESULT_OK) {
+            //Image Uri will not be null for RESULT_OK
+            final Uri resultUri = data.getData();
+            File thumb_file=new File(resultUri.getPath());
+            Bitmap resized = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(thumb_file.getPath()), 200, 200);
+            ByteArrayOutputStream baos= new ByteArrayOutputStream();
+            resized.compress(Bitmap.CompressFormat.JPEG,70,baos);
+            byte[] thumb_byte=baos.toByteArray();
+            final StorageReference thumb_refrence=mStorageRef.child("ProfilePictures").child("thumbs").child(uid+".jpg");
+            final StorageReference storageReference=mStorageRef.child("ProfilePictures").child(uid+".jpg");
+            final UploadTask uploadTask = storageReference.putFile(resultUri);
+            UploadTask uploadTask1=thumb_refrence.putBytes(thumb_byte);
+            Task<Uri> urlTask1 = uploadTask1.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    if (!task.isSuccessful()) {
+                        Toast.makeText(DisplayUser.this, "Task Failed", Toast.LENGTH_SHORT).show();
                     }
-                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if (task.isSuccessful()) {
-                            Uri downloadUri = task.getResult();
-                            urlThumb=downloadUri.toString();
+                    return thumb_refrence.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        urlThumb = downloadUri.toString();
 
-                            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                                @Override
-                                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                                    if (!task.isSuccessful()) {
-                                        throw task.getException();
-                                    }
-                                    return storageReference.getDownloadUrl();
+                        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                            @Override
+                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                if (!task.isSuccessful()) {
+                                    Toast.makeText(DisplayUser.this, "Task Failed", Toast.LENGTH_SHORT).show();
                                 }
-                            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Uri> task) {
-                                    if (task.isSuccessful()) {
-                                        Uri downloadUri = task.getResult();
-                                        String url=downloadUri.toString();
+                                return storageReference.getDownloadUrl();
+                            }
+                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+                                if (task.isSuccessful()) {
+                                    Uri downloadUri = task.getResult();
+                                    String url = downloadUri.toString();
 
-                                        usersData usersData=new usersData();
-                                        usersData.setName(userd.getName());
-                                        usersData.setOnline(userd.getOnline());
-                                        usersData.setPicture(url);
-                                        usersData.setThumb(urlThumb);
-                                        usersData.setStatus(userd.getStatus());
-                                        usersData.setToken(userd.getToken());
-                                        usersData.setUpvotes(userd.getUpvotes());
-                                        databaseReference.setValue(usersData);
-                                        RequestOptions options = new RequestOptions()
-                                                .circleCrop()
-                                                .placeholder(R.drawable.ic_account_circle_black_24dp)
-                                                .error(R.drawable.ic_account_circle_black_24dp);
+                                    usersData usersData = new usersData();
+                                    usersData.setName(userd.getName());
+                                    usersData.setOnline(userd.getOnline());
+                                    usersData.setPicture(url);
+                                    usersData.setThumb(urlThumb);
+                                    usersData.setStatus(userd.getStatus());
+                                    usersData.setToken(userd.getToken());
+                                    usersData.setUpvotes(userd.getUpvotes());
+                                    databaseReference.setValue(usersData);
+                                    RequestOptions options = new RequestOptions()
+                                            .circleCrop()
+                                            .placeholder(R.drawable.ic_account_circle_black_24dp)
+                                            .error(R.drawable.ic_account_circle_black_24dp);
 
-                                        Glide.with(DisplayUser.this).load(url).apply(options).into(imageView);
-                                        Toast.makeText(DisplayUser.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
-                                        image_progressbar.setVisibility(View.INVISIBLE);
-                                    } else {
-                                        Toast.makeText(DisplayUser.this, "Got Some error", Toast.LENGTH_SHORT).show();
-                                        image_progressbar.setVisibility(View.INVISIBLE);
-                                    }
+                                    Glide.with(DisplayUser.this).load(url).apply(options).into(imageView);
+                                    Toast.makeText(DisplayUser.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
+                                    image_progressbar.setVisibility(View.INVISIBLE);
+                                } else {
+                                    Toast.makeText(DisplayUser.this, "Got Some error", Toast.LENGTH_SHORT).show();
+                                    image_progressbar.setVisibility(View.INVISIBLE);
                                 }
-                            });
-                        } else {
-                            Toast.makeText(DisplayUser.this, "Got Some error while generating thumbnail\nPlease upload again", Toast.LENGTH_SHORT).show();
-                        }
+                            }
+                        });
+                    } else {
+                        Toast.makeText(DisplayUser.this, "Got Some error while generating thumbnail\nPlease upload again", Toast.LENGTH_SHORT).show();
                     }
-                });
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(this, "Error occurred ", Toast.LENGTH_SHORT).show();
-                image_progressbar.setVisibility(View.INVISIBLE);
-            }
+                }
+            });
+
+        } else if (resultCode == ImagePicker.RESULT_ERROR) {
+            Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
         }
     }
 }

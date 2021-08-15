@@ -18,4 +18,5 @@
         <item name="android:textColorSecondary">@color/colorPrimary</item>
         <item name="android:fontFamily">@font/baumans</item>
     </style>
+
 </resources>

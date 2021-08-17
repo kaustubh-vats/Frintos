@@ -43,4 +43,15 @@
     <string name="toss_details">You can write any thought or story here It will be forwarded to any random person on Frintos</string>
     <string name="toss_hint">Enter your thoughts here&#8230; Share with random persons</string>
     <string name="send_toss">Send Toss</string>
+    <string name="chat_background">Chat Background</string>
+    <string name="change_wallpaper">Change Wallpaper</string>
+    <string name="save_for_all_chats">Save For ALl Chats</string>
+    <string name="save_for_this_chat">Save for This Chat</string>
+    <string name="remove_background">Remove Background</string>
+    <string name="display_image">Display Image</string>
+    <string name="is_online">Is Online</string>
+    <string name="type_a_message">Type a message</string>
+    <string name="send_message_button">Send Message Button</string>
+    <string name="send_message_animation">Send Message Animation</string>
+    <string name="google_login">Google LogIn</string>
 </resources>

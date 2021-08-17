@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WallpaperActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/demo_head_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:padding="10dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:contentDescription="@string/display_image"
+                android:id="@+id/head_image"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                app:srcCompat="@drawable/ic_account_circle_black_24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:fontFamily="@font/baumans"
+                android:maxWidth="220dp"
+                android:maxLines="1"
+                android:text="@string/app_name"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/head_image"
+                />
+
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_below="@+id/demo_head_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:contentDescription="@string/chat_background"
+            android:id="@+id/imageView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/chat_bg_light_default"
+            android:scaleType="fitXY"/>
+        <include
+            android:id="@+id/received_message"
+            layout="@layout/chat_layout"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_margin="5dp"/>
+        <include
+            android:id="@+id/sent_message"
+            layout="@layout/chat_layout_1"
+            android:layout_below="@+id/received_message"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="5dp"/>
+
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/delete_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="4dp"
+        android:background="@drawable/buttonbg"
+        android:text="@string/remove_background"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="8dp"
+        android:onClick="deleteImage"
+        android:layout_above="@+id/save_for_this_chat"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="4dp"
+        android:background="@drawable/buttonbg"
+        android:text="@string/save_for_all_chats"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/change_wallpaper"
+        android:layout_margin="8dp"
+        android:onClick="saveForAllChanges"
+        android:id="@+id/save_for_all_changes"
+        />
+
+    <Button
+        android:id="@+id/save_for_this_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="4dp"
+        android:background="@drawable/buttonbg"
+        android:text="@string/save_for_this_chat"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="8dp"
+        android:onClick="saveForThisChat"
+        android:layout_above="@+id/save_for_all_changes"
+        />
+
+    <Button
+        android:id="@+id/change_wallpaper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="4dp"
+        android:background="@drawable/buttonbg"
+        android:text="@string/change_wallpaper"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="8dp"
+        android:onClick="changeWallpaper"
+        />
+
+
+</RelativeLayout>

@@ -45,7 +45,7 @@ public class RequestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.fragment_request, container, false);
-        final String uid=FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String uid= Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser(),"No Current User").getUid();
         progressBar=view.findViewById(R.id.progressBar8);
         recyclerView=view.findViewById(R.id.recyclerView2);
         textView=view.findViewById(R.id.textView11);
@@ -67,7 +67,7 @@ public class RequestFragment extends Fragment {
                 {
                     for(DataSnapshot ds: snapshot.getChildren())
                     {
-                        if(ds.child("type").getValue().toString().equals("received"))
+                        if(Objects.requireNonNull(ds.child("type").getValue(),"No Value Found as name type").toString().equals("received"))
                         {
                             final String userId=ds.getKey();
                             if (userId != null) {
@@ -77,16 +77,18 @@ public class RequestFragment extends Fragment {
                                         progressBar.setVisibility(View.INVISIBLE);
                                         usersData ud=snapshot.getValue(usersData.class);
                                         MyUserData myUserData=new MyUserData();
-                                        myUserData.setName(ud.getName());
-                                        myUserData.setPicture(ud.getPicture());
-                                        myUserData.setThumb(ud.getThumb());
-                                        myUserData.setOnline(ud.getOnline());
-                                        myUserData.setStatus(ud.getStatus());
-                                        myUserData.setToken(ud.getToken());
-                                        myUserData.setUpvotes(ud.getUpvotes());
-                                        myUserData.setUid(userId);
-                                        usersDataList.add(myUserData);
-                                        setView(usersDataList,view);
+                                        if (ud != null) {
+                                            myUserData.setName(ud.getName());
+                                            myUserData.setPicture(ud.getPicture());
+                                            myUserData.setThumb(ud.getThumb());
+                                            myUserData.setOnline(ud.getOnline());
+                                            myUserData.setStatus(ud.getStatus());
+                                            myUserData.setToken(ud.getToken());
+                                            myUserData.setUpvotes(ud.getUpvotes());
+                                            myUserData.setUid(userId);
+                                            usersDataList.add(myUserData);
+                                            setView(usersDataList, view);
+                                        }
                                     }
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError error) {
@@ -95,6 +97,11 @@ public class RequestFragment extends Fragment {
                                 });
                             }
                         }
+                    }
+                    if(usersDataList.isEmpty()){
+                        progressBar.setVisibility(View.INVISIBLE);
+                        setView(usersDataList,view);
+                        textView.setVisibility(View.VISIBLE);
                     }
                 }
                 else

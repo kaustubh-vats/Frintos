@@ -31,6 +31,7 @@ import com.google.firebase.storage.StorageReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class DisplayImage extends AppCompatActivity {
     Button button,button1;
@@ -65,7 +66,7 @@ public class DisplayImage extends AppCompatActivity {
                 .placeholder(R.drawable.ic_account_circle_black_24dp)
                 .error(R.drawable.ic_account_circle_black_24dp);
 
-        Glide.with(DisplayImage.this).load(image).apply(options).into(imageView);
+        Glide.with(getApplicationContext()).load(image).apply(options).into(imageView);
         progressBar.setVisibility(View.INVISIBLE);
         if(flag.equals("false"))
         {
@@ -81,58 +82,37 @@ public class DisplayImage extends AppCompatActivity {
         {
             mStorageRef=firebaseStorage.getReferenceFromUrl(image);
         }
-        button.setOnClickListener(new View.OnClickListener() {
-                                      @Override
-                                      public void onClick(View v) {
-                                          progressBar.setVisibility(View.VISIBLE);
-                                          databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
-                                          final StorageReference thumb_refrence1 = firebaseStorage.getReferenceFromUrl(thumb);
-                                          final StorageReference storageReference1 = firebaseStorage.getReferenceFromUrl(image);
-                                          thumb_refrence1.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                              @Override
-                                              public void onSuccess(Void aVoid) {
-                                                  storageReference1.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                      @Override
-                                                      public void onSuccess(Void aVoid) {
-                                                              databaseReference.child("picture").setValue("default");
-                                                              databaseReference.child("thumb").setValue("default");
-                                                              progressBar.setVisibility(View.INVISIBLE);
-                                                              finish();
-                                                      }
-                                                  }).addOnFailureListener(new OnFailureListener() {
-                                                      @Override
-                                                      public void onFailure(@NonNull Exception e) {
-                                                          Toast.makeText(DisplayImage.this, "Error while deleting "+e.toString(), Toast.LENGTH_SHORT).show();
-                                                          progressBar.setVisibility(View.INVISIBLE);
-                                                      }
-                                                  });
-                                              }
-                                          }).addOnFailureListener(new OnFailureListener() {
-                                              @Override
-                                              public void onFailure(@NonNull Exception e) {
-                                                  Toast.makeText(DisplayImage.this, "Error while deleting thumb "+e.toString(), Toast.LENGTH_SHORT).show();
-                                                  progressBar.setVisibility(View.INVISIBLE);
-                                              }
-                                          });
-                                      }
-                                  });
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Toast.makeText(DisplayImage.this, "UNDER DEVELOPMENT FEATURE", Toast.LENGTH_SHORT).show();
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        button.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
+            final StorageReference thumb_refrence1 = firebaseStorage.getReferenceFromUrl(thumb);
+            final StorageReference storageReference1 = firebaseStorage.getReferenceFromUrl(image);
+            thumb_refrence1.delete().addOnSuccessListener(aVoid -> storageReference1.delete().addOnSuccessListener(aVoid1 -> {
+                    databaseReference.child("picture").setValue("default");
+                    databaseReference.child("thumb").setValue("default");
+                    progressBar.setVisibility(View.INVISIBLE);
+                    finish();
+            }).addOnFailureListener(e -> {
+                Toast.makeText(DisplayImage.this, "Error while deleting "+e.toString(), Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.INVISIBLE);
+            })).addOnFailureListener(e -> {
+                Toast.makeText(DisplayImage.this, "Error while deleting thumb "+e.toString(), Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.INVISIBLE);
+            });
+        });
+        button1.setOnClickListener(v -> {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
+                if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED)
                 {
-                    if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED)
-                    {
-                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},RequestCode);
-                    }
-                    else
-                    {
-                        download();
-                    }
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},RequestCode);
                 }
-
+                else
+                {
+                    download();
+                }
             }
+
         });
     }
 
@@ -152,24 +132,16 @@ public class DisplayImage extends AppCompatActivity {
     {
         DateFormat df = new SimpleDateFormat("yyyyMMddhhmmssS");
         final String filename = name+df.format(new Date()) + ".jpg";
-        mStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                String url=uri.toString();
-                DownloadManager.Request request=new DownloadManager.Request(Uri.parse(url));
-                request.setDescription("Downloading profile picture");
-                request.setTitle(filename);
-                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                request.setDestinationInExternalPublicDir("/Frintos","/ProfilePictures/"+filename);
-                DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-                downloadManager.enqueue(request);
-                Toast.makeText(DisplayImage.this, "Started Downloading", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(DisplayImage.this, "Error occurred", Toast.LENGTH_SHORT).show();
-            }
-        });
+        mStorageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            String url=uri.toString();
+            DownloadManager.Request request=new DownloadManager.Request(Uri.parse(url));
+            request.setDescription("Downloading profile picture");
+            request.setTitle(filename);
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.setDestinationInExternalPublicDir("/Frintos","/ProfilePictures/"+filename);
+            DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+            downloadManager.enqueue(request);
+            Toast.makeText(DisplayImage.this, "Started Downloading", Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(exception -> Toast.makeText(DisplayImage.this, "Error occurred", Toast.LENGTH_SHORT).show());
     }
 }

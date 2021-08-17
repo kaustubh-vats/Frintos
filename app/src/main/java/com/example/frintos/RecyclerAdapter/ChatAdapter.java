@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,10 +32,12 @@ import java.util.List;
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHolder>{
     Context context;
     List<ChatModel> chatModelList;
+    boolean turnAnimation;
 
     public ChatAdapter(Context context, List<ChatModel> chatModelList) {
         this.context = context;
         this.chatModelList = chatModelList;
+        turnAnimation = true;
     }
 
     @NonNull
@@ -67,7 +70,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
-
         ChatModel chatModel=chatModelList.get(position);
         holder.textView.setText(chatModel.getMessage());
         holder.textView.setLongClickable(true);
@@ -77,23 +79,30 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         holder.textView1.setText(myDate);
         if(holder.vType==0)
         {
-            Animation animation= AnimationUtils.loadAnimation(context,R.anim.slideleft);
-            animation.setDuration(500);
+
             if(!chatModel.getThumb().equals("default"))
             {
                 RequestOptions options = new RequestOptions()
                         .circleCrop()
                         .placeholder(R.drawable.ic_account_circle_black_24dp)
                         .error(R.drawable.ic_account_circle_black_24dp);
-                Glide.with(context).load(chatModel.getThumb()).apply(options).into(holder.imageView);
+                Glide.with(context.getApplicationContext()).load(chatModel.getThumb()).apply(options).into(holder.imageView);
             }
-            holder.constraintLayout.startAnimation(animation);
+            if(turnAnimation)
+            {
+                Animation animation= AnimationUtils.loadAnimation(context,R.anim.slideleft);
+                animation.setDuration(500);
+                holder.constraintLayout.startAnimation(animation);
+            }
         }
-        else
+        else if(turnAnimation)
         {
             Animation animation1=AnimationUtils.loadAnimation(context,R.anim.slideright_anim);
             animation1.setDuration(500);
             holder.constraintLayout.startAnimation(animation1);
+        }
+        if(position == 0){
+            turnAnimation = false;
         }
     }
 
@@ -122,42 +131,32 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
                 textView1=itemView.findViewById(R.id.textView24);
                 constraintLayout=itemView.findViewById(R.id.constraintLayout10);
             }
-            textView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    ClipboardManager clipboardManager= (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clipData = ClipData.newPlainText("Message",textView.getText().toString());
-                    clipboardManager.setPrimaryClip(clipData);
-                    Toast.makeText(context, "Text has been copied", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
+            textView.setOnLongClickListener(v -> {
+                ClipboardManager clipboardManager= (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText("Message",textView.getText().toString());
+                clipboardManager.setPrimaryClip(clipData);
+                Toast.makeText(context, "Text has been copied", Toast.LENGTH_SHORT).show();
+                return true;
             });
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Calendar calendar=Calendar.getInstance();
-                    calendar.setTimeInMillis(chatModelList.get(getAdapterPosition()).getTimestamp());
-                    String[] months={"January","February","March","April","May","June","July","August","September","October","November","December"};
-                    String[] days={"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
-                    String[] am_pm={"AM","PM"};
-                    System.out.println(calendar.get(Calendar.DAY_OF_WEEK));
-                    String messageInfo = days[calendar.get(Calendar.DAY_OF_WEEK)-1]+", "+months[calendar.get(Calendar.MONTH)]+" "+calendar.get(Calendar.DAY_OF_MONTH)+" "+calendar.get(Calendar.YEAR)+"\n"+calendar.get(Calendar.HOUR)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND)+" "+am_pm[calendar.get(Calendar.AM_PM)];
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setMessage(messageInfo);
-                    builder.setTitle("Message Info");
-                    builder.setIcon(context.getDrawable(R.drawable.logo));
-                    builder.setNeutralButton("Okay", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                }
+            textView.setOnClickListener(v -> {
+                Calendar calendar=Calendar.getInstance();
+                calendar.setTimeInMillis(chatModelList.get(getAdapterPosition()).getTimestamp());
+                String[] months={"January","February","March","April","May","June","July","August","September","October","November","December"};
+                String[] days={"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
+                String[] am_pm={"AM","PM"};
+                System.out.println(calendar.get(Calendar.DAY_OF_WEEK));
+                String messageInfo = days[calendar.get(Calendar.DAY_OF_WEEK)-1]+", "+months[calendar.get(Calendar.MONTH)]+" "+calendar.get(Calendar.DAY_OF_MONTH)+" "+calendar.get(Calendar.YEAR)+"\n"+calendar.get(Calendar.HOUR)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND)+" "+am_pm[calendar.get(Calendar.AM_PM)];
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage(messageInfo);
+                builder.setTitle("Message Info");
+                builder.setIcon(AppCompatResources.getDrawable(context, R.drawable.logo));
+                builder.setNeutralButton("Okay", (dialog, which) -> dialog.cancel());
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             });
 
         }
+
 
     }
 }

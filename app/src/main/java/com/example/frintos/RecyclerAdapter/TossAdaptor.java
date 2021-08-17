@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -55,7 +56,7 @@ public class TossAdaptor extends RecyclerView.Adapter<TossAdaptor.MyViewOnHolder
                     .circleCrop()
                     .placeholder(R.drawable.ic_account_circle_black_24dp)
                     .error(R.drawable.ic_account_circle_black_24dp);
-            Glide.with(context).load(tossModel.getThumb()).apply(options).into(holder.imageView);
+            Glide.with(context.getApplicationContext()).load(tossModel.getThumb()).apply(options).into(holder.imageView);
         }
         final DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference().child("toss").child(myuid).child(tossModel.getSender_id());
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -68,13 +69,13 @@ public class TossAdaptor extends RecyclerView.Adapter<TossAdaptor.MyViewOnHolder
                     {
                         holder.imageButton1.setEnabled(false);
                         holder.upt=true;
-                        holder.imageButton1.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_keyboard_arrow_up_24_green));
+                        holder.imageButton1.setImageDrawable(AppCompatResources.getDrawable(context,R.drawable.ic_baseline_keyboard_arrow_up_24_green));
                     }
                     if(tossModel.isReported())
                     {
                         holder.imageButton2.setEnabled(false);
                         holder.rpt=true;
-                        holder.imageButton2.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_keyboard_arrow_down_24_red));
+                        holder.imageButton2.setImageDrawable(AppCompatResources.getDrawable(context,R.drawable.ic_baseline_keyboard_arrow_down_24_red));
                     }
                 }
             }
@@ -147,38 +148,29 @@ public class TossAdaptor extends RecyclerView.Adapter<TossAdaptor.MyViewOnHolder
                     if(snapshot.exists())
                     {
                         upvotes= Objects.requireNonNull(snapshot.getValue()).toString();
-                        if(upvotes!=null)
-                        {
-                            int upvt = Integer.parseInt(upvotes);
-                            upvt+=1;
-                            upvotes = String.valueOf(upvt);
-                            databaseReference.setValue(upvotes).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful())
+                        int upvt = Integer.parseInt(upvotes);
+                        upvt+=1;
+                        upvotes = String.valueOf(upvt);
+                        databaseReference.setValue(upvotes).addOnCompleteListener(task -> {
+                            if(task.isSuccessful())
+                            {
+                                FirebaseDatabase.getInstance().getReference().child("toss").child(myuid).child(sender_id).child("upvoted").setValue(true).addOnCompleteListener(task1 -> {
+                                    if(task1.isSuccessful())
                                     {
-                                        FirebaseDatabase.getInstance().getReference().child("toss").child(myuid).child(sender_id).child("upvoted").setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if(task.isSuccessful())
-                                                {
-                                                    imageButton1.setEnabled(false);
-                                                    Toast.makeText(context, "Succesfully Upvoted", Toast.LENGTH_SHORT).show();
-                                                    imageButton1.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_keyboard_arrow_up_24_green));
-                                                }
-                                                else {
-                                                    Toast.makeText(context, "Failed to upvote", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
+                                        imageButton1.setEnabled(false);
+                                        Toast.makeText(context, "Succesfully Upvoted", Toast.LENGTH_SHORT).show();
+                                        imageButton1.setImageDrawable(AppCompatResources.getDrawable(context,R.drawable.ic_baseline_keyboard_arrow_up_24_green));
                                     }
-                                    else
-                                    {
+                                    else {
                                         Toast.makeText(context, "Failed to upvote", Toast.LENGTH_SHORT).show();
                                     }
-                                }
-                            });
-                        }
+                                });
+                            }
+                            else
+                            {
+                                Toast.makeText(context, "Failed to upvote", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }
 
@@ -189,27 +181,21 @@ public class TossAdaptor extends RecyclerView.Adapter<TossAdaptor.MyViewOnHolder
             });
         }
         private void DeleteUser(View v, String sender_id, final int pos) {
-            FirebaseDatabase.getInstance().getReference().child("toss").child(myuid).child(sender_id).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful())
-                    {
-                        tossModels.remove(pos);
-                        notifyDataSetChanged();
-                    }
+            FirebaseDatabase.getInstance().getReference().child("toss").child(myuid).child(sender_id).removeValue().addOnCompleteListener(task -> {
+                if(task.isSuccessful())
+                {
+                    tossModels.remove(pos);
+                    notifyDataSetChanged();
                 }
             });
         }
         private void ReportUser(View v, String sender_id) {
-            FirebaseDatabase.getInstance().getReference().child("toss").child(myuid).child(sender_id).child("reported").setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful())
-                    {
-                        imageButton2.setEnabled(false);
-                        imageButton2.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_keyboard_arrow_down_24_red));
-                        Toast.makeText(context, "You have reported for the user... We will now look into the matter and will update you soon\nThanks for collaborating to make Frintos clean", Toast.LENGTH_LONG).show();
-                    }
+            FirebaseDatabase.getInstance().getReference().child("toss").child(myuid).child(sender_id).child("reported").setValue(true).addOnCompleteListener(task -> {
+                if(task.isSuccessful())
+                {
+                    imageButton2.setEnabled(false);
+                    imageButton2.setImageDrawable(AppCompatResources.getDrawable(context,R.drawable.ic_baseline_keyboard_arrow_down_24_red));
+                    Toast.makeText(context, "You have reported for the user... We will now look into the matter and will update you soon\nThanks for collaborating to make Frintos clean", Toast.LENGTH_LONG).show();
                 }
             });
         }

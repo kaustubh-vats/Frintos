@@ -1,5 +1,7 @@
 package com.example.frintos.Model;
 
+import androidx.annotation.Nullable;
+
 public class ChatModel {
     String myuid;
     String message;
@@ -86,5 +88,21 @@ public class ChatModel {
 
     public void setThumb(String thumb) {
         this.thumb = thumb;
+    }
+
+    @Override
+    public int hashCode() {
+        String s = String.valueOf(timestamp);
+        s+=String.valueOf(thumb.hashCode());
+        return Integer.parseInt(s);
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(obj==this) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        ChatModel chatModel = (ChatModel) obj;
+        if(chatModel.getTimestamp() != timestamp) return  false;
+        return chatModel.getMessageId().equals(messageId);
     }
 }

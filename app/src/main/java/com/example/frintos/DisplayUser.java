@@ -3,9 +3,11 @@ package com.example.frintos;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
@@ -22,9 +24,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.frintos.Model.usersData;
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.github.dhaval2404.imagepicker.listener.DismissListener;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -72,17 +71,18 @@ public class DisplayUser extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 userd=dataSnapshot.getValue(usersData.class);
-                textView.setText(userd.getName());
-                editText.setText(userd.getStatus());
-                progressBar.setVisibility(View.INVISIBLE);
-                if(!userd.getPicture().equals("default"))
-                {
-                    RequestOptions options = new RequestOptions()
-                            .circleCrop()
-                            .placeholder(R.drawable.ic_account_circle_black_24dp)
-                            .error(R.drawable.ic_account_circle_black_24dp);
+                if (userd != null) {
+                    textView.setText(userd.getName());
+                    editText.setText(userd.getStatus());
+                    progressBar.setVisibility(View.INVISIBLE);
+                    if (!userd.getPicture().equals("default")) {
+                        RequestOptions options = new RequestOptions()
+                                .circleCrop()
+                                .placeholder(R.drawable.ic_account_circle_black_24dp)
+                                .error(R.drawable.ic_account_circle_black_24dp);
 
-                    Glide.with(DisplayUser.this).load(userd.getPicture()).apply(options).into(imageView);
+                        Glide.with(getApplicationContext()).load(userd.getPicture()).apply(options).into(imageView);
+                    }
                 }
                 image_progressbar.setVisibility(View.INVISIBLE);
             }
@@ -91,17 +91,14 @@ public class DisplayUser extends AppCompatActivity {
                 Toast.makeText(DisplayUser.this, "Database Error", Toast.LENGTH_SHORT).show();
             }
         });
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(DisplayUser.this,DisplayImage.class);
-                intent.putExtra("image",userd.getPicture());
-                intent.putExtra("thumb",userd.getThumb());
-                intent.putExtra("name",userd.getName());
-                intent.putExtra("uid",uid);
-                intent.putExtra("flg","true");
-                startActivity(intent);
-            }
+        imageView.setOnClickListener(v -> {
+            Intent intent=new Intent(DisplayUser.this,DisplayImage.class);
+            intent.putExtra("image",userd.getPicture());
+            intent.putExtra("thumb",userd.getThumb());
+            intent.putExtra("name",userd.getName());
+            intent.putExtra("uid",uid);
+            intent.putExtra("flg","true");
+            startActivity(intent);
         });
     }
     public void updatePicture(View view){
@@ -124,16 +121,13 @@ public class DisplayUser extends AppCompatActivity {
         usersData.setUpvotes(userd.getUpvotes());
         String status=editText.getText().toString();
         usersData.setStatus(status);
-        databaseReference.setValue(usersData).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful())
-                {
-                    progressBar.setVisibility(View.INVISIBLE);
-                } else {
-                    editText.setText("ERROR");
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
+        databaseReference.setValue(usersData).addOnCompleteListener(task -> {
+            if(task.isSuccessful())
+            {
+                progressBar.setVisibility(View.INVISIBLE);
+            } else {
+                editText.setText("ERROR");
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -144,7 +138,6 @@ public class DisplayUser extends AppCompatActivity {
         image_progressbar.setVisibility(View.INVISIBLE);
 
         if (resultCode == Activity.RESULT_OK) {
-            //Image Uri will not be null for RESULT_OK
             final Uri resultUri = data.getData();
             File thumb_file=new File(resultUri.getPath());
             Bitmap resized = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(thumb_file.getPath()), 200, 200);
@@ -155,62 +148,49 @@ public class DisplayUser extends AppCompatActivity {
             final StorageReference storageReference=mStorageRef.child("ProfilePictures").child(uid+".jpg");
             final UploadTask uploadTask = storageReference.putFile(resultUri);
             UploadTask uploadTask1=thumb_refrence.putBytes(thumb_byte);
-            Task<Uri> urlTask1 = uploadTask1.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if (!task.isSuccessful()) {
-                        Toast.makeText(DisplayUser.this, "Task Failed", Toast.LENGTH_SHORT).show();
-                    }
-                    return thumb_refrence.getDownloadUrl();
+            Task<Uri> urlTask1 = uploadTask1.continueWithTask(task -> {
+                if (!task.isSuccessful()) {
+                    Toast.makeText(DisplayUser.this, "Task Failed", Toast.LENGTH_SHORT).show();
                 }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        urlThumb = downloadUri.toString();
+                return thumb_refrence.getDownloadUrl();
+            }).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    urlThumb = downloadUri.toString();
 
-                        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                            @Override
-                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                if (!task.isSuccessful()) {
-                                    Toast.makeText(DisplayUser.this, "Task Failed", Toast.LENGTH_SHORT).show();
-                                }
-                                return storageReference.getDownloadUrl();
-                            }
-                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Uri> task) {
-                                if (task.isSuccessful()) {
-                                    Uri downloadUri = task.getResult();
-                                    String url = downloadUri.toString();
+                    Task<Uri> urlTask = uploadTask.continueWithTask(task1 -> {
+                        if (!task1.isSuccessful()) {
+                            Toast.makeText(DisplayUser.this, "Task Failed", Toast.LENGTH_SHORT).show();
+                        }
+                        return storageReference.getDownloadUrl();
+                    }).addOnCompleteListener(task12 -> {
+                        if (task12.isSuccessful()) {
+                            Uri downloadUri1 = task12.getResult();
+                            String url = downloadUri1.toString();
+                            usersData usersData = new usersData();
+                            usersData.setName(userd.getName());
+                            usersData.setOnline(userd.getOnline());
+                            usersData.setPicture(url);
+                            usersData.setThumb(urlThumb);
+                            usersData.setStatus(userd.getStatus());
+                            usersData.setToken(userd.getToken());
+                            usersData.setUpvotes(userd.getUpvotes());
+                            databaseReference.setValue(usersData);
+                            RequestOptions options = new RequestOptions()
+                                    .circleCrop()
+                                    .placeholder(R.drawable.ic_account_circle_black_24dp)
+                                    .error(R.drawable.ic_account_circle_black_24dp);
 
-                                    usersData usersData = new usersData();
-                                    usersData.setName(userd.getName());
-                                    usersData.setOnline(userd.getOnline());
-                                    usersData.setPicture(url);
-                                    usersData.setThumb(urlThumb);
-                                    usersData.setStatus(userd.getStatus());
-                                    usersData.setToken(userd.getToken());
-                                    usersData.setUpvotes(userd.getUpvotes());
-                                    databaseReference.setValue(usersData);
-                                    RequestOptions options = new RequestOptions()
-                                            .circleCrop()
-                                            .placeholder(R.drawable.ic_account_circle_black_24dp)
-                                            .error(R.drawable.ic_account_circle_black_24dp);
-
-                                    Glide.with(DisplayUser.this).load(url).apply(options).into(imageView);
-                                    Toast.makeText(DisplayUser.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
-                                    image_progressbar.setVisibility(View.INVISIBLE);
-                                } else {
-                                    Toast.makeText(DisplayUser.this, "Got Some error", Toast.LENGTH_SHORT).show();
-                                    image_progressbar.setVisibility(View.INVISIBLE);
-                                }
-                            }
-                        });
-                    } else {
-                        Toast.makeText(DisplayUser.this, "Got Some error while generating thumbnail\nPlease upload again", Toast.LENGTH_SHORT).show();
-                    }
+                            Glide.with(getApplicationContext()).load(url).apply(options).into(imageView);
+                            Toast.makeText(DisplayUser.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
+                            image_progressbar.setVisibility(View.INVISIBLE);
+                        } else {
+                            Toast.makeText(DisplayUser.this, "Got Some error", Toast.LENGTH_SHORT).show();
+                            image_progressbar.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                } else {
+                    Toast.makeText(DisplayUser.this, "Got Some error while generating thumbnail\nPlease upload again", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -219,5 +199,21 @@ public class DisplayUser extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void dark_theme(View view) {
+        SharedPreferences sharedPreferences = getSharedPreferences("dark mode", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        editor.putString("dark mode enabled", "yes");
+        editor.apply();
+    }
+
+    public void lignt_theme(View view) {
+        SharedPreferences sharedPreferences = getSharedPreferences("dark mode", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        editor.putString("dark mode enabled", "no");
+        editor.apply();
     }
 }

@@ -49,7 +49,7 @@ public class AdapterClass extends RecyclerView.Adapter<AdapterClass.MyViewHolder
                 .circleCrop()
                 .placeholder(R.drawable.ic_account_circle_black_24dp)
                 .error(R.drawable.ic_account_circle_black_24dp);
-        Glide.with(context).load(ud.getThumb()).apply(options).into(holder.imageView);
+        Glide.with(context.getApplicationContext()).load(ud.getThumb()).apply(options).into(holder.imageView);
     }
 
     @Override

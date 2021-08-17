@@ -2,8 +2,10 @@ package com.example.frintos;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -31,6 +33,16 @@ public class Welcome extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences sharedPreferences = getSharedPreferences("dark mode", MODE_PRIVATE);
+        String nightMode = sharedPreferences.getString("dark mode enabled", "undefined");
+        if(nightMode.equals("yes"))
+        {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else if(nightMode.equals("no"))
+        {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         String uid= firebaseUser.getUid();
@@ -42,6 +54,10 @@ public class Welcome extends AppCompatActivity {
         linearLayout=findViewById(R.id.linearLayout);
         Intent intent = getIntent();
         String name= intent.getStringExtra("name");
+        if(name.length() > 12){
+            name = name.substring(0,12);
+            name+="...";
+        }
         textView.setText("Welcome, "+name+" My Friend");
         Animation slideRight = AnimationUtils.loadAnimation(this,R.anim.slideleft);
         slideRight.setDuration(1000);

@@ -184,34 +184,21 @@ public class LoginActivity extends AppCompatActivity {
                                                 userdatamap.put("thumb","default");
                                                 userdatamap.put("token",deviceToken);
                                                 userdatamap.put("upvotes","0");
-                                                mDatabase.setValue(userdatamap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task12) {
-                                                        if(task12.isSuccessful())
-                                                        {
-                                                            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                                                                @Override
-                                                                public void run() {
-                                                                    Toast.makeText(LoginActivity.this, "Please Wait", Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            },3000);
-                                                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                            startActivity(intent);
-                                                            finish();
-                                                        }
-                                                        else
-                                                        {
-                                                            Toast.makeText(LoginActivity.this, "Unknown Error Occurred", Toast.LENGTH_SHORT).show();
-                                                        }
+                                                mDatabase.setValue(userdatamap).addOnCompleteListener(task12 -> {
+                                                    if(task12.isSuccessful())
+                                                    {
+                                                        new Handler(Looper.getMainLooper()).postDelayed(() -> Toast.makeText(LoginActivity.this, "Please Wait", Toast.LENGTH_SHORT).show(),3000);
+                                                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                    else
+                                                    {
+                                                        Toast.makeText(LoginActivity.this, "Unknown Error Occurred", Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(LoginActivity.this, "Error while generating Token", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                                            }).addOnFailureListener(e -> Toast.makeText(LoginActivity.this, "Error while generating Token", Toast.LENGTH_SHORT).show());
 
                                 }
                             }
@@ -249,22 +236,19 @@ public class LoginActivity extends AppCompatActivity {
 
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        // There are no request codes
-                        Intent data = result.getData();
-                        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-                        try {
-                            // Google Sign In was successful, authenticate with Firebase
-                            GoogleSignInAccount account = task.getResult(ApiException.class);
-                            if (account != null) {
-                                firebaseAuthWithGoogle(account.getIdToken());
-                            }
-                        } catch (ApiException e) {
-                            Toast.makeText(LoginActivity.this, "Login Failed due to: "+e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    // There are no request codes
+                    Intent data = result.getData();
+                    Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                    try {
+                        // Google Sign In was successful, authenticate with Firebase
+                        GoogleSignInAccount account = task.getResult(ApiException.class);
+                        if (account != null) {
+                            firebaseAuthWithGoogle(account.getIdToken());
                         }
+                    } catch (ApiException e) {
+                        Toast.makeText(LoginActivity.this, "Login Failed due to: "+e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -319,34 +303,21 @@ public class LoginActivity extends AppCompatActivity {
                                             userdatamap.put("thumb",picture);
                                             userdatamap.put("token",deviceToken);
                                             userdatamap.put("upvotes","0");
-                                            mDatabase.setValue(userdatamap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task12) {
-                                                    if(task12.isSuccessful())
-                                                    {
-                                                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                Toast.makeText(LoginActivity.this, "Please Wait", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        },3000);
-                                                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                        startActivity(intent);
-                                                        finish();
-                                                    }
-                                                    else
-                                                    {
-                                                        Toast.makeText(LoginActivity.this, "Unknown Error Occurred", Toast.LENGTH_SHORT).show();
-                                                    }
+                                            mDatabase.setValue(userdatamap).addOnCompleteListener(task12 -> {
+                                                if(task12.isSuccessful())
+                                                {
+                                                    new Handler(Looper.getMainLooper()).postDelayed(() -> Toast.makeText(LoginActivity.this, "Please Wait", Toast.LENGTH_SHORT).show(),3000);
+                                                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                                else
+                                                {
+                                                    Toast.makeText(LoginActivity.this, "Unknown Error Occurred", Toast.LENGTH_SHORT).show();
                                                 }
                                             });
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(LoginActivity.this, "Error while generating Token", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                                        }).addOnFailureListener(e -> Toast.makeText(LoginActivity.this, "Error while generating Token", Toast.LENGTH_SHORT).show());
 
                             }
                         }
@@ -381,18 +352,15 @@ public class LoginActivity extends AppCompatActivity {
         userdatamap.put("thumb", thumbdata);
         userdatamap.put("token", tokendata);
         userdatamap.put("upvotes", upvotes);
-        mDatabase.setValue(userdatamap).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(LoginActivity.this, "Unknown Error Occurred", Toast.LENGTH_SHORT).show();
-                    button.setEnabled(true);
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
+        mDatabase.setValue(userdatamap).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            } else {
+                Toast.makeText(LoginActivity.this, "Unknown Error Occurred", Toast.LENGTH_SHORT).show();
+                button.setEnabled(true);
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }

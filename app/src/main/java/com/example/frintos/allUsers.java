@@ -64,19 +64,21 @@ public class allUsers extends AppCompatActivity {
                     usersDataList=new ArrayList<>();
                     for(DataSnapshot ds: snapshot.getChildren())
                     {
-                        if(!ds.getKey().equals(uid))
+                        if(!Objects.equals(ds.getKey(), uid))
                         {
                             usersData ud=ds.getValue(usersData.class);
                             MyUserData myUserData=new MyUserData();
-                            myUserData.setName(ud.getName());
-                            myUserData.setOnline(ud.getOnline());
-                            myUserData.setPicture(ud.getPicture());
-                            myUserData.setThumb(ud.getThumb());
-                            myUserData.setStatus(ud.getStatus());
-                            myUserData.setToken(ud.getToken());
-                            myUserData.setUid(ds.getKey());
-                            myUserData.setUpvotes(ud.getUpvotes());
-                            usersDataList.add(myUserData);
+                            if (ud != null) {
+                                myUserData.setName(ud.getName());
+                                myUserData.setOnline(ud.getOnline());
+                                myUserData.setPicture(ud.getPicture());
+                                myUserData.setThumb(ud.getThumb());
+                                myUserData.setStatus(ud.getStatus());
+                                myUserData.setToken(ud.getToken());
+                                myUserData.setUid(ds.getKey());
+                                myUserData.setUpvotes(ud.getUpvotes());
+                                usersDataList.add(myUserData);
+                            }
                         }
                     }
                     progressBar.setVisibility(View.INVISIBLE);

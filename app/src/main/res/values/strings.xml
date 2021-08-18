@@ -54,4 +54,5 @@
     <string name="send_message_button">Send Message Button</string>
     <string name="send_message_animation">Send Message Animation</string>
     <string name="google_login">Google LogIn</string>
+    <string name="search_friends_button">Search Friends Button</string>
 </resources>

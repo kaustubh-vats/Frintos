@@ -95,12 +95,7 @@ public class otpcheck extends AppCompatActivity {
                                 FirebaseMessaging.getInstance().getToken().addOnSuccessListener(s -> {
                                     deviceToken=s;
                                     updateToken(dataname,dataimage,datathumb,datastatus,deviceToken,dataupvotes);
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(otpcheck.this, "Error while generating Token", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                                }).addOnFailureListener(e -> Toast.makeText(otpcheck.this, "Error while generating Token", Toast.LENGTH_SHORT).show());
                             } else {
                                 FirebaseMessaging.getInstance().getToken().addOnSuccessListener(instanceIdResult -> {
                                     deviceToken=instanceIdResult;

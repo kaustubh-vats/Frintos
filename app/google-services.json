@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "483210534252-dtii1ceh71d12a75m6ovp2rlhoqso14u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.frintos",
+            "certificate_hash": "5c82e338f19e2a812859329f56f5044446e564d0"
+          }
+        },
+        {
           "client_id": "483210534252-lf88ebo2q7fdrg7a3i9aa14hlr7gl9hg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

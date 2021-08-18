@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -55,104 +57,90 @@ public class otpcheck extends AppCompatActivity {
         editText=findViewById(R.id.editText5);
         mAuth=FirebaseAuth.getInstance();
         currentUser=mAuth.getCurrentUser();
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String otp=editText.getText().toString();
-                if(TextUtils.isEmpty(otp))
-                    editText.setError(name+" I told you I don't trust anyone... Please Enter OTP");
-                else{
-                    button.setEnabled(false);
-                    progressBar.setVisibility(View.VISIBLE);
-                    PhoneAuthCredential phoneAuthCredential= PhoneAuthProvider.getCredential(mAuthCredentials,otp);
-                    signInWithPhoneAuthCredential(phoneAuthCredential);
-                }
+        editText.setOnEditorActionListener((v, actionId, event) -> {
+            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                button.performClick();
+            }
+            return false;
+        });
+        button.setOnClickListener(v -> {
+            String otp=editText.getText().toString();
+            if(TextUtils.isEmpty(otp))
+                editText.setError(name+" I told you I don't trust anyone... Please Enter OTP");
+            else{
+                button.setEnabled(false);
+                progressBar.setVisibility(View.VISIBLE);
+                PhoneAuthCredential phoneAuthCredential= PhoneAuthProvider.getCredential(mAuthCredentials,otp);
+                signInWithPhoneAuthCredential(phoneAuthCredential);
             }
         });
     }
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                        FirebaseUser user = task.getResult().getUser();
-                        String uid=user.getUid();
-                        FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
-                        mDatabase=firebaseDatabase.getReference().child("users").child(uid);
-                        mDatabase.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists()) {
-                                    final String dataname=dataSnapshot.child("name").getValue().toString();
-                                    final String dataimage=dataSnapshot.child("picture").getValue().toString();
-                                    final String datathumb=dataSnapshot.child("thumb").getValue().toString();
-                                    final String datastatus=dataSnapshot.child("status").getValue().toString();
-                                    final String dataupvotes=dataSnapshot.child("upvotes").getValue().toString();
-                                    FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
-                                        @Override
-                                        public void onSuccess(String s) {
-                                            deviceToken=s;
-                                            updateToken(dataname,dataimage,datathumb,datastatus,deviceToken,dataupvotes);
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(otpcheck.this, "Error while generating Token", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                } else {
-                                    FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
-                                        @Override
-                                        public void onSuccess(String instanceIdResult) {
-                                            deviceToken=instanceIdResult;
-                                            HashMap<String, String> userdatamap = new HashMap<>();
-                                            userdatamap.put("name", name);
-                                            userdatamap.put("online","true");
-                                            userdatamap.put("status", "Proud Frintoser");
-                                            userdatamap.put("picture", "default");
-                                            userdatamap.put("thumb", "default");
-                                            userdatamap.put("token",deviceToken);
-                                            userdatamap.put("upvotes","0");
-                                            mDatabase.setValue(userdatamap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        Intent intent = new Intent(otpcheck.this, MainActivity.class);
-                                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                        startActivity(intent);
-                                                        finish();
-                                                    } else {
-                                                        Toast.makeText(otpcheck.this, "Unknown Error Occurred", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                }
-                                            });
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(otpcheck.this, "Error while generating Token", Toast.LENGTH_SHORT).show();
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                    FirebaseUser user = task.getResult().getUser();
+                    String uid=user.getUid();
+                    FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
+                    mDatabase=firebaseDatabase.getReference().child("users").child(uid);
+                    mDatabase.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                final String dataname=dataSnapshot.child("name").getValue().toString();
+                                final String dataimage=dataSnapshot.child("picture").getValue().toString();
+                                final String datathumb=dataSnapshot.child("thumb").getValue().toString();
+                                final String datastatus=dataSnapshot.child("status").getValue().toString();
+                                final String dataupvotes=dataSnapshot.child("upvotes").getValue().toString();
+                                FirebaseMessaging.getInstance().getToken().addOnSuccessListener(s -> {
+                                    deviceToken=s;
+                                    updateToken(dataname,dataimage,datathumb,datastatus,deviceToken,dataupvotes);
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(otpcheck.this, "Error while generating Token", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } else {
+                                FirebaseMessaging.getInstance().getToken().addOnSuccessListener(instanceIdResult -> {
+                                    deviceToken=instanceIdResult;
+                                    HashMap<String, String> userdatamap = new HashMap<>();
+                                    userdatamap.put("name", name);
+                                    userdatamap.put("online","true");
+                                    userdatamap.put("status", "Proud Frintoser");
+                                    userdatamap.put("picture", "default");
+                                    userdatamap.put("thumb", "default");
+                                    userdatamap.put("token",deviceToken);
+                                    userdatamap.put("upvotes","0");
+                                    mDatabase.setValue(userdatamap).addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            Intent intent = new Intent(otpcheck.this, MainActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(intent);
+                                            finish();
+                                        } else {
+                                            Toast.makeText(otpcheck.this, "Unknown Error Occurred", Toast.LENGTH_SHORT).show();
                                         }
                                     });
-                                }
+                                }).addOnFailureListener(e -> Toast.makeText(otpcheck.this, "Error while generating Token", Toast.LENGTH_SHORT).show());
                             }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                Log.d("datacancel","Data base error occurred");
-                            }
-                        });
-
-
-                    } else {
-                            // Sign in failed, display a message and update the UI
-                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                Toast.makeText(otpcheck.this, "Invalid OTP", Toast.LENGTH_SHORT).show();
-                                editText.setError("Be Careful "+name+" it is heartbreaking that you are lying with invalid OTP");
-                            }
-                            button.setEnabled(true);
-                            progressBar.setVisibility(View.INVISIBLE);
                         }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.d("datacancel","Data base error occurred");
+                        }
+                    });
+
+
+                } else {
+                        // Sign in failed, display a message and update the UI
+                        if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                            Toast.makeText(otpcheck.this, "Invalid OTP", Toast.LENGTH_SHORT).show();
+                            editText.setError("Be Careful "+name+" it is heartbreaking that you are lying with invalid OTP");
+                        }
+                        button.setEnabled(true);
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
 
@@ -179,19 +167,16 @@ public class otpcheck extends AppCompatActivity {
         userdatamap.put("thumb", thumbdata);
         userdatamap.put("token", tokendata);
         userdatamap.put("upvotes",upvotes);
-        mDatabase.setValue(userdatamap).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Intent intent = new Intent(otpcheck.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(otpcheck.this, "Unknown Error Occurred", Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.INVISIBLE);
-                    button.setEnabled(true);
-                }
+        mDatabase.setValue(userdatamap).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Intent intent = new Intent(otpcheck.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(otpcheck.this, "Unknown Error Occurred", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.INVISIBLE);
+                button.setEnabled(true);
             }
         });
     }

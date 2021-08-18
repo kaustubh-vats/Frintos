@@ -8,10 +8,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.frintos.Model.MyUserData;
@@ -58,7 +61,6 @@ public class allUsers extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
                 {
-                    ArrayList<String> s1=new ArrayList<>();
                     usersDataList=new ArrayList<>();
                     for(DataSnapshot ds: snapshot.getChildren())
                     {
@@ -86,11 +88,12 @@ public class allUsers extends AppCompatActivity {
                 Toast.makeText(allUsers.this, "Got Some Error", Toast.LENGTH_SHORT).show();
             }
         });
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SearchFrint();
+        imageButton.setOnClickListener(v -> SearchFrint());
+        editText.setOnEditorActionListener((v, actionId, event) -> {
+            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                imageButton.performClick();
             }
+            return false;
         });
     }
 

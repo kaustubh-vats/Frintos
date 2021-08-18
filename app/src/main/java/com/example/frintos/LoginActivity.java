@@ -17,7 +17,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -75,37 +77,47 @@ public class LoginActivity extends AppCompatActivity {
         button=findViewById(R.id.button);
         progressBar=findViewById(R.id.progressBar);
         currentUser=mAuth.getCurrentUser();
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String displayName=editText.getText().toString();
-                String phoneNumber=editText1.getText().toString();
-                if(editText2.getText().toString().isEmpty())
-                    editText2.setText(R.string.countrycode);
-                if(TextUtils.isEmpty(displayName)||TextUtils.isEmpty(phoneNumber))
+        editText1.setFocusableInTouchMode(true);
+        editText.setOnEditorActionListener((v, actionId, event) -> {
+            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                editText1.requestFocus();
+            }
+            return false;
+        });
+        editText1.setOnEditorActionListener((v, actionId, event) -> {
+            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                button.performClick();
+            }
+            return false;
+        });
+        button.setOnClickListener(v -> {
+            String displayName=editText.getText().toString();
+            String phoneNumber=editText1.getText().toString();
+            if(editText2.getText().toString().isEmpty())
+                editText2.setText(R.string.countrycode);
+            if(TextUtils.isEmpty(displayName)||TextUtils.isEmpty(phoneNumber))
+            {
+                if(TextUtils.isEmpty(displayName))
+                    editText.setError("You Should have a name to proceed");
+                if(TextUtils.isEmpty(phoneNumber))
                 {
-                    if(TextUtils.isEmpty(displayName))
-                        editText.setError("You Should have a name to proceed");
-                    if(TextUtils.isEmpty(phoneNumber))
-                    {
-                        if(displayName.isEmpty())
-                            editText1.setError("Please give me your phone number too");
-                        else
-                            editText1.setError(displayName+" please give me your phone number");
-                    }
+                    if(displayName.isEmpty())
+                        editText1.setError("Please give me your phone number too");
+                    else
+                        editText1.setError(displayName+" please give me your phone number");
                 }
-                else {
-                    String completePhone=editText2.getText().toString()+phoneNumber;
-                    progressBar.setVisibility(View.VISIBLE);
-                    button.setEnabled(false);
-                    PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
-                                    .setPhoneNumber(completePhone)
-                                    .setTimeout(60L, TimeUnit.SECONDS)
-                                    .setActivity(LoginActivity.this)
-                                    .setCallbacks(callbacks)
-                                    .build();
-                    PhoneAuthProvider.verifyPhoneNumber(options);
-                }
+            }
+            else {
+                String completePhone=editText2.getText().toString()+phoneNumber;
+                progressBar.setVisibility(View.VISIBLE);
+                button.setEnabled(false);
+                PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
+                                .setPhoneNumber(completePhone)
+                                .setTimeout(60L, TimeUnit.SECONDS)
+                                .setActivity(LoginActivity.this)
+                                .setCallbacks(callbacks)
+                                .build();
+                PhoneAuthProvider.verifyPhoneNumber(options);
             }
         });
         callbacks=new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -133,93 +145,90 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = task.getResult().getUser();
-                            String uid=user.getUid();
-                            FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
-                            mDatabase=firebaseDatabase.getReference().child("users").child(uid);
-                            mDatabase.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if(dataSnapshot.exists()) {
-                                        final String dataname=dataSnapshot.child("name").getValue().toString();
-                                        final String dataimage=dataSnapshot.child("picture").getValue().toString();
-                                        final String datathumb=dataSnapshot.child("thumb").getValue().toString();
-                                        final String datastatus=dataSnapshot.child("status").getValue().toString();
-                                        final String dataupvotes=dataSnapshot.child("upvotes").getValue().toString();
-                                        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task1 -> {
-                                            if (!task1.isSuccessful()) {
-                                                Log.w("failedInstance", "getInstanceId failed", task.getException());
-                                                return;
-                                            }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = task.getResult().getUser();
+                        String uid=user.getUid();
+                        FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
+                        mDatabase=firebaseDatabase.getReference().child("users").child(uid);
+                        mDatabase.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()) {
+                                    final String dataname=dataSnapshot.child("name").getValue().toString();
+                                    final String dataimage=dataSnapshot.child("picture").getValue().toString();
+                                    final String datathumb=dataSnapshot.child("thumb").getValue().toString();
+                                    final String datastatus=dataSnapshot.child("status").getValue().toString();
+                                    final String dataupvotes=dataSnapshot.child("upvotes").getValue().toString();
+                                    FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task1 -> {
+                                        if (!task1.isSuccessful()) {
+                                            Log.w("failedInstance", "getInstanceId failed", task.getException());
+                                            return;
+                                        }
 
-                                            deviceToken = task1.getResult();
-                                            updateToken(dataname,dataimage,datathumb,datastatus,deviceToken,dataupvotes);
+                                        deviceToken = task1.getResult();
+                                        updateToken(dataname,dataimage,datathumb,datastatus,deviceToken,dataupvotes);
 
-                                        });
-                                    }
-                                    else {
+                                    });
+                                }
+                                else {
 
-                                        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(
-                                                s -> {
-                                                    deviceToken=s;
-                                                    HashMap<String,String>userdatamap= new HashMap<>();
-                                                    userdatamap.put("name",editText.getText().toString());
-                                                    userdatamap.put("online","true");
-                                                    userdatamap.put("status", "Proud Frintoser");
-                                                    userdatamap.put("picture","default");
-                                                    userdatamap.put("thumb","default");
-                                                    userdatamap.put("token",deviceToken);
-                                                    userdatamap.put("upvotes","0");
-                                                    mDatabase.setValue(userdatamap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<Void> task12) {
-                                                            if(task12.isSuccessful())
-                                                            {
-                                                                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                                                                    @Override
-                                                                    public void run() {
-                                                                        Toast.makeText(LoginActivity.this, "Please Wait", Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                },3000);
-                                                                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                                startActivity(intent);
-                                                                finish();
-                                                            }
-                                                            else
-                                                            {
-                                                                Toast.makeText(LoginActivity.this, "Unknown Error Occurred", Toast.LENGTH_SHORT).show();
-                                                            }
+                                    FirebaseMessaging.getInstance().getToken().addOnSuccessListener(
+                                            s -> {
+                                                deviceToken=s;
+                                                HashMap<String,String>userdatamap= new HashMap<>();
+                                                userdatamap.put("name",editText.getText().toString());
+                                                userdatamap.put("online","true");
+                                                userdatamap.put("status", "Proud Frintoser");
+                                                userdatamap.put("picture","default");
+                                                userdatamap.put("thumb","default");
+                                                userdatamap.put("token",deviceToken);
+                                                userdatamap.put("upvotes","0");
+                                                mDatabase.setValue(userdatamap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task12) {
+                                                        if(task12.isSuccessful())
+                                                        {
+                                                            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    Toast.makeText(LoginActivity.this, "Please Wait", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            },3000);
+                                                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                            startActivity(intent);
+                                                            finish();
                                                         }
-                                                    });
-                                                }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(LoginActivity.this, "Error while generating Token", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
+                                                        else
+                                                        {
+                                                            Toast.makeText(LoginActivity.this, "Unknown Error Occurred", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(LoginActivity.this, "Error while generating Token", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
 
-                                    }
                                 }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    Toast.makeText(LoginActivity.this, "Database error", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                        } else {
-                            // Sign in failed, display a message and update the UI
-                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                Toast.makeText(LoginActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                             }
-                            button.setEnabled(true);
-                            progressBar.setVisibility(View.INVISIBLE);
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Toast.makeText(LoginActivity.this, "Database error", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    } else {
+                        // Sign in failed, display a message and update the UI
+                        if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                            Toast.makeText(LoginActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                         }
+                        button.setEnabled(true);
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
 

@@ -274,9 +274,12 @@ public class ChatActivity extends AppCompatActivity {
                         chatModel.setTimestamp(getchatData.getTimestamp());
                         chatModel.setThumb(thumb);
                         chatModel.setMessageId(snapshot.getKey());
-                        messageList.remove(chatModel);
-                        chatAdapter.notifyDataSetChanged();
-                        recyclerView.scrollToPosition(messageList.size() - 1);
+                        if(!myuid.equals(chatModel.getFrom()))
+                        {
+                            messageList.remove(chatModel);
+                            chatAdapter.notifyDataSetChanged();
+                            recyclerView.scrollToPosition(messageList.size() - 1);
+                        }
                     }
                 }
             }

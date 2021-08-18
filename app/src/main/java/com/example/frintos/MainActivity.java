@@ -49,9 +49,6 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         bottomNavigationView = findViewById(R.id.bottomnav);
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null) {
-            logoutUser();
-        }
         Toolbar toolbar = findViewById(R.id.toolbar);
         viewPager2 = findViewById(R.id.viewPager);
         sectionsPagerAdaptor = new SectionsPagerAdaptor(this);

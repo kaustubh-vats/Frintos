@@ -72,15 +72,20 @@
         </RelativeLayout>
 
     </androidx.appcompat.widget.Toolbar>
-
-    <ImageView
-        android:contentDescription="@string/chat_background"
-        android:layout_below="@+id/constraintLayout4"
-        android:id="@+id/imageView14"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/chat_bg_light_default"
-        android:scaleType="fitXY" />
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:layout_below="@+id/constraintLayout4"
+        android:overScrollMode="never">
+        <ImageView
+            android:contentDescription="@string/chat_background"
+            android:id="@+id/imageView14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/chat_bg_light_default"
+            android:scaleType="fitXY" />
+    </ScrollView>
 
     <ProgressBar
         android:id="@+id/progressBar12"

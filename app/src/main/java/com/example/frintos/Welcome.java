@@ -83,6 +83,9 @@ public class Welcome extends AppCompatActivity {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent intent1 =new Intent(Welcome.this,MainActivity.class);
             intent1.putExtra("flag",true);
+            intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent1);
             finish();
         }, TIME_OUT);

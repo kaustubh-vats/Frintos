@@ -110,6 +110,7 @@ public class WallpaperActivity extends AppCompatActivity {
     public void saveForThisChat(View view) {
         if(bmp==null) {
             Toast.makeText(WallpaperActivity.this, "Choose a file first", Toast.LENGTH_SHORT).show();
+            return;
         }
         if(saveToInternalStorage(uid,bmp)){
             Toast.makeText(WallpaperActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();

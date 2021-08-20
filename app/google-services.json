@@ -50,6 +50,43 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:483210534252:android:23e7a0424ab14c95a26749",
+        "android_client_info": {
+          "package_name": "com.frintos.frintos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "483210534252-okis7f9g0ac3qpro22o52n3587coj7gd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.frintos.frintos",
+            "certificate_hash": "5c82e338f19e2a812859329f56f5044446e564d0"
+          }
+        },
+        {
+          "client_id": "483210534252-6eef88ckasje2asgevh2gsh5goudmvaa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA95E7e1ZcYj5_tWUhC3ADTHd77vPKGjdo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "483210534252-6eef88ckasje2asgevh2gsh5goudmvaa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

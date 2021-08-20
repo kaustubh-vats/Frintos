@@ -5,7 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ChatActivity">
-
+    <ImageView
+        android:contentDescription="@string/chat_background"
+        android:id="@+id/imageView14"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/constraintLayout4"
+        app:srcCompat="@drawable/chat_bg_light_default"
+        android:scaleType="centerCrop"/>
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/constraintLayout4"
         android:layout_width="match_parent"
@@ -72,20 +79,9 @@
         </RelativeLayout>
 
     </androidx.appcompat.widget.Toolbar>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:layout_below="@+id/constraintLayout4"
-        android:overScrollMode="never">
-        <ImageView
-            android:contentDescription="@string/chat_background"
-            android:id="@+id/imageView14"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/chat_bg_light_default"
-            android:scaleType="fitXY" />
-    </ScrollView>
+
+
+
 
     <ProgressBar
         android:id="@+id/progressBar12"
@@ -104,35 +100,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
         <EditText
-            android:importantForAutofill="no"
             android:id="@+id/editTextTextMultiLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:hint="@string/type_a_message"
             android:background="@drawable/edittextbg_chat"
             android:ems="10"
-            android:inputType="textMultiLine"
+            android:hint="@string/type_a_message"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine|textCapSentences"
+            android:maxLines="5"
             android:maxHeight="120dp"
+            android:minHeight="48dp"
             android:padding="8dp"
             android:paddingHorizontal="10dp" />
 
         <ImageButton
             android:id="@+id/imageButton4"
-            android:contentDescription="@string/send_message_button"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
+            android:minHeight="48dp"
             android:adjustViewBounds="true"
             android:autofillHints="Enter Your Text here..."
             android:background="@drawable/buttonbg"
+            android:contentDescription="@string/send_message_button"
             android:onClick="sendText"
             android:padding="20dp"
             app:srcCompat="@drawable/ic_baseline_send_24" />
@@ -153,9 +152,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentTop="true"/>
+            android:layout_alignParentBottom="true" />
     </RelativeLayout>
 
 

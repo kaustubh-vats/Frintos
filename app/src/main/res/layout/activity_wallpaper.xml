@@ -52,10 +52,10 @@
         <ImageView
             android:contentDescription="@string/chat_background"
             android:id="@+id/imageView15"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/chat_bg_light_default"
-            android:scaleType="fitXY"/>
+            android:scaleType="centerCrop"/>
         <include
             android:id="@+id/received_message"
             layout="@layout/chat_layout"

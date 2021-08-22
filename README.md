@@ -1,11 +1,15 @@
 <style>
 
 .container img{
-display: inline-block;
+display: inline;
+margin: 10px;
+height: 500px;
 }
 .container{
 overflow-x: auto;
 padding: 10px;
+white-space: nowrap;
+height: 540px;
 }
 
 </style>
@@ -32,7 +36,7 @@ padding: 10px;
 ## How To Use
 
 + Clone this Project using android studio.
-    + If you just want to try the app then [click here](https://drive.google.com/file/d/1PXvRcHEg6rf_-J_hBF2oBt-Fo-IYZ4hY/view?usp=sharing)
+  + If you just want to try the app then [click here](https://drive.google.com/file/d/1PXvRcHEg6rf_-J_hBF2oBt-Fo-IYZ4hY/view?usp=sharing)
 
 # Features
 
@@ -57,9 +61,9 @@ padding: 10px;
 
 <div class="container">
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/dark/chat.jpeg?raw=true" alt="Demo for Online"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/chat.jpeg?raw=true" alt="Demo for Online"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/light/chat.jpeg?raw=true" alt="Demo for Last Seen"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/chat.jpeg?raw=true" alt="Demo for Last Seen"/>
 
 </div>
 
@@ -76,27 +80,27 @@ padding: 10px;
 
 <div class="container">
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/light/login.jpeg?raw=true" alt="Demo for Login"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/register.jpeg?raw=true" alt="Demo for Login"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/light/otp.jpeg?raw=true" alt="Demo for OTP"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/otp.jpeg?raw=true" alt="Demo for OTP"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/light/chatl.jpeg?raw=true" alt="Demo for All Chats"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/chatl.jpeg?raw=true" alt="Demo for All Chats"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/light/request.jpeg?raw=true" alt="Demo for Request Layout"/>
+<img src="https://github.com/kaustubh-vats/frintos/blob/main/screenshots/light/request.jpeg?raw=true" alt="Demo for Request Layout"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/light/search.jpeg?raw=true" alt="Demo for Search Friends"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/search.jpeg?raw=true" alt="Demo for Search Friends"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/light/chat.jpeg?raw=true" alt="Demo for Chat"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/chat.jpeg?raw=true" alt="Demo for Chat"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/light/chatbg.jpeg?raw=true" alt="Demo for Chat Background"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/chatbg.jpeg?raw=true" alt="Demo for Chat Background"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/light/toss.jpeg?raw=true" alt="Demo for Toss"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/toss.jpeg?raw=true" alt="Demo for Toss"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/light/tossdemo.jpeg?raw=true" alt="Demo for Toss"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/tossdemo.jpeg?raw=true" alt="Demo for Toss"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/light/profile.jpeg?raw=true" alt="Demo for Profile Edit"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/profile.jpeg?raw=true" alt="Demo for Profile Edit"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/light/profileimage.jpeg?raw=true" alt="Demo for Profile Image"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/profileimage.jpeg?raw=true" alt="Demo for Profile Image"/>
 
 </div>
 
@@ -104,26 +108,26 @@ padding: 10px;
 
 <div class="container">
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/dark/login.jpeg?raw=true" alt="Demo for Login"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/register.jpeg?raw=true" alt="Demo for Login"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/dark/otp.jpeg?raw=true" alt="Demo for OTP"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/otp.jpeg?raw=true" alt="Demo for OTP"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/dark/chatl.jpeg?raw=true" alt="Demo for All Chats"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/chatl.jpeg?raw=true" alt="Demo for All Chats"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/dark/request.jpeg?raw=true" alt="Demo for Request Layout"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/request.jpeg?raw=true" alt="Demo for Request Layout"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/dark/search.jpeg?raw=true" alt="Demo for Search Friends"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/search.jpeg?raw=true" alt="Demo for Search Friends"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/dark/chat.jpeg?raw=true" alt="Demo for Chat"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/chat.jpeg?raw=true" alt="Demo for Chat"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/dark/chatbg.jpeg?raw=true" alt="Demo for Chat Background"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/chatbg.jpeg?raw=true" alt="Demo for Chat Background"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/dark/toss.jpeg?raw=true" alt="Demo for Toss"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/toss.jpeg?raw=true" alt="Demo for Toss"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/dark/tossdemo.jpeg?raw=true" alt="Demo for Toss"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/tossdemo.jpeg?raw=true" alt="Demo for Toss"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/dark/profile.jpeg?raw=true" alt="Demo for Profile Edit"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/profile.jpeg?raw=true" alt="Demo for Profile Edit"/>
 
-<img src="https://github.com/kaustubh-vats/frintos/blob/master/screenshots/dark/profileimage.jpeg?raw=true" alt="Demo for Profile Image"/>
+<img src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/profileimage.jpeg?raw=true" alt="Demo for Profile Image"/>
 
 </div>

@@ -1,0 +1,29 @@
+<svg width="100%" height="540px" xmlns="http://www.w3.org/2000/svg">
+<foreignObject width="100%" height="540px">
+    <div class="container" style="padding:10px; white-space:nowrap; overflow-x:scroll;">
+
+    <img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/register.jpeg?raw=true" alt="Demo for Login"/>
+
+    <img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/otp.jpeg?raw=true" alt="Demo for OTP"/>
+
+    <img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/chatl.jpeg?raw=true" alt="Demo for All Chats"/>
+
+    <img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/request.jpeg?raw=true" alt="Demo for Request Layout"/>
+
+    <img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/search.jpeg?raw=true" alt="Demo for Search Friends"/>
+
+    <img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/chat.jpeg?raw=true" alt="Demo for Chat"/>
+
+    <img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/chatbg.jpeg?raw=true" alt="Demo for Chat Background"/>
+
+    <img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/toss.jpeg?raw=true" alt="Demo for Toss"/>
+
+    <img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/tossdemo.jpeg?raw=true" alt="Demo for Toss"/>
+
+    <img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/profile.jpeg?raw=true" alt="Demo for Profile Edit"/>
+
+    <img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/profileimage.jpeg?raw=true" alt="Demo for Profile Image"/>
+
+    </div>
+</foreignObject>
+</svg>

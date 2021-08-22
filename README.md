@@ -43,11 +43,9 @@
 #### You can see the person is online if you see a red beating heart beside their name in your chat window.
 #### Also You can see the last seen of the user if you are friend of each other.
 
-<div class="container" height="540px" style="white-space: nowrap; overflow-x:scroll;">
+<div>
 
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/chat.jpeg?raw=true" alt="Demo for Online"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/chat.jpeg?raw=true" alt="Demo for Last Seen"/>
+<img height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/chat.jpeg?raw=true" alt="Demo for Online"/> <img height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/chat.jpeg?raw=true" alt="Demo for Last Seen"/>
 
 </div>
 
@@ -62,56 +60,8 @@
 
 # Day theme Screenshots
 
-<div class="container" style="padding:10px; white-space:nowrap; overflow-x:scroll;">
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/register.jpeg?raw=true" alt="Demo for Login"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/otp.jpeg?raw=true" alt="Demo for OTP"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/chatl.jpeg?raw=true" alt="Demo for All Chats"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/frintos/blob/main/screenshots/light/request.jpeg?raw=true" alt="Demo for Request Layout"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/search.jpeg?raw=true" alt="Demo for Search Friends"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/chat.jpeg?raw=true" alt="Demo for Chat"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/chatbg.jpeg?raw=true" alt="Demo for Chat Background"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/toss.jpeg?raw=true" alt="Demo for Toss"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/tossdemo.jpeg?raw=true" alt="Demo for Toss"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/profile.jpeg?raw=true" alt="Demo for Profile Edit"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/light/profileimage.jpeg?raw=true" alt="Demo for Profile Image"/>
-
-</div>
+![Day Screenshots](https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/day.svg?raw=true)
 
 # Night Theme Screenshots
 
-<div class="container" style="padding:10px; white-space:nowrap; overflow-x:scroll;">
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/register.jpeg?raw=true" alt="Demo for Login"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/otp.jpeg?raw=true" alt="Demo for OTP"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/chatl.jpeg?raw=true" alt="Demo for All Chats"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/request.jpeg?raw=true" alt="Demo for Request Layout"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/search.jpeg?raw=true" alt="Demo for Search Friends"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/chat.jpeg?raw=true" alt="Demo for Chat"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/chatbg.jpeg?raw=true" alt="Demo for Chat Background"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/toss.jpeg?raw=true" alt="Demo for Toss"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/tossdemo.jpeg?raw=true" alt="Demo for Toss"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/profile.jpeg?raw=true" alt="Demo for Profile Edit"/>
-
-<img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/profileimage.jpeg?raw=true" alt="Demo for Profile Image"/>
-
-</div>
+![Night Screenshots](https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/night.svg?raw=true)

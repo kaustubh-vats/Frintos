@@ -72,6 +72,10 @@ public class Welcome extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String dataname=dataSnapshot.child("name").getValue().toString();
+                if(dataname.length() > 12){
+                    dataname = dataname.substring(0,12);
+                    dataname+="...";
+                }
                 String newWelcomeStr = "Welcome, "+dataname+" My Friend";
                 textView.setText(newWelcomeStr);
             }

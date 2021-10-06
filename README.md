@@ -1,3 +1,4 @@
+![Image not found](https://github.com/kaustubh-vats/frintos/blob/main/screenshots/main.png?raw=true)
 # Frintos
 
 ### Frintos name is a mixture of two words Frints + Toss. Where Frints means friends. Toss is a feature defined below.

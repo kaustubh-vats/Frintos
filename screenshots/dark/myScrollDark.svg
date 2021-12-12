@@ -3,7 +3,7 @@
     <div xmlns="http://www.w3.org/1999/xhtml">
         <div class="container" style="padding:10px; white-space:nowrap; overflow-x:scroll;">
 
-        <img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/register.jpeg?raw=true" alt="Demo for Login"/>
+        <img style="display: inline;margin 10px" height="500px" src="https://raw.githubusercontent.com/kaustubh-vats/Frintos/main/screenshots/light/chat.jpeg" alt="Demo for Login"/>
 
         <img style="display: inline;margin 10px" height="500px" src="https://github.com/kaustubh-vats/Frintos/blob/main/screenshots/dark/otp.jpeg?raw=true" alt="Demo for OTP"/>
 

@@ -37,7 +37,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FirebaseAuth.AuthStateListener authStateListener = firebaseAuth -> {
+            if(firebaseAuth.getCurrentUser()==null){
+                Intent log_intent=new Intent(MainActivity.this, LoginActivity.class);
+                log_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(log_intent);
+                finish();
+            }
+        };
         mAuth = FirebaseAuth.getInstance();
+        mAuth.addAuthStateListener(authStateListener);
         bottomNavigationView = findViewById(R.id.bottomnav);
         FirebaseUser currentUser = mAuth.getCurrentUser();
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -120,10 +129,6 @@ public class MainActivity extends AppCompatActivity {
             if(task.isSuccessful())
             {
                 mAuth.signOut();
-                Intent log_intent=new Intent(MainActivity.this, LoginActivity.class);
-                log_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(log_intent);
-                finish();
             }
             else
             {

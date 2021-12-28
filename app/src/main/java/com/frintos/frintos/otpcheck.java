@@ -2,10 +2,8 @@ package com.frintos.frintos;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -102,11 +100,6 @@ public class otpcheck extends AppCompatActivity {
                                     userdatamap.put("thumb", "default");
                                     userdatamap.put("token",deviceToken);
                                     userdatamap.put("upvotes","0");
-                                    SharedPreferences sharedPreferences = getSharedPreferences("token", MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                                    editor.putString("tokenId", deviceToken);
-                                    editor.apply();
                                     mDatabase.setValue(userdatamap).addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
                                             Intent intent = new Intent(otpcheck.this, MainActivity.class);
@@ -162,11 +155,6 @@ public class otpcheck extends AppCompatActivity {
         userdatamap.put("thumb", thumbdata);
         userdatamap.put("token", tokendata);
         userdatamap.put("upvotes",upvotes);
-        SharedPreferences sharedPreferences = getSharedPreferences("token", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        editor.putString("tokenId", tokendata);
-        editor.apply();
         mDatabase.setValue(userdatamap).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Intent intent = new Intent(otpcheck.this, MainActivity.class);

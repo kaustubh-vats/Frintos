@@ -29,7 +29,6 @@ public class Welcome extends AppCompatActivity {
     TextView textView;
     ImageView imageView;
     LinearLayout linearLayout;
-    String tokenFromFirebase, tokenFromSharedPref;
     FirebaseAuth firebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,17 +67,14 @@ public class Welcome extends AppCompatActivity {
         Animation popup=AnimationUtils.loadAnimation(this,R.anim.popup);
         popup.setDuration(1000);
         imageView.startAnimation(popup);
-        SharedPreferences sharedPreferences1 = getSharedPreferences("token", MODE_PRIVATE);
-        tokenFromSharedPref = sharedPreferences1.getString("tokenId", "undefined");
         databaseReference.keepSynced(true);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String dataname=dataSnapshot.child("name").getValue().toString();
-                tokenFromFirebase = dataSnapshot.child("token").getValue().toString();
-                if(dataname.length() > 12) {
-                    dataname = dataname.substring(0, 12);
-                    dataname += "...";
+                if(dataname.length() > 12){
+                    dataname = dataname.substring(0,12);
+                    dataname+="...";
                 }
                 String newWelcomeStr = "Welcome, "+dataname+" My Friend";
                 textView.setText(newWelcomeStr);
@@ -91,25 +87,13 @@ public class Welcome extends AppCompatActivity {
         });
         int TIME_OUT = 2000;
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            if(tokenFromFirebase.equals(tokenFromSharedPref))
-            {
-                Intent intent1 =new Intent(Welcome.this,MainActivity.class);
-                intent1.putExtra("flag",true);
-                intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent1);
-                finish();
-            } else {
-                Intent intent1 =new Intent(Welcome.this,ErrorActivity.class);
-                intent1.putExtra("flag",true);
-                intent1.putExtra("error","Your account is currently logged in somewhere else");
-                intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent1);
-                finish();
-            }
+            Intent intent1 =new Intent(Welcome.this,MainActivity.class);
+            intent1.putExtra("flag",true);
+            intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent1);
+            finish();
         }, TIME_OUT);
     }
 }

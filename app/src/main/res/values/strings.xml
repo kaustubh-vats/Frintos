@@ -56,4 +56,6 @@
     <string name="google_login">Google LogIn</string>
     <string name="search_friends_button">Search Friends Button</string>
     <string name="error">ERROR</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="log_in_here_again">Log In here Again</string>
 </resources>

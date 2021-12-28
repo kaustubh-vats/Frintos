@@ -4,9 +4,11 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -176,6 +178,11 @@ public class LoginActivity extends AppCompatActivity {
                                                 userdatamap.put("thumb","default");
                                                 userdatamap.put("token",deviceToken);
                                                 userdatamap.put("upvotes","0");
+                                                SharedPreferences sharedPreferences = getSharedPreferences("token", MODE_PRIVATE);
+                                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                                                editor.putString("tokenId", deviceToken);
+                                                editor.apply();
                                                 mDatabase.setValue(userdatamap).addOnCompleteListener(task12 -> {
                                                     if(task12.isSuccessful())
                                                     {
@@ -278,7 +285,6 @@ public class LoginActivity extends AppCompatActivity {
                                 });
                             }
                             else {
-
                                 FirebaseMessaging.getInstance().getToken().addOnSuccessListener(
                                         s -> {
                                             Uri pic = firebaseUser.getPhotoUrl();
@@ -295,6 +301,13 @@ public class LoginActivity extends AppCompatActivity {
                                             userdatamap.put("thumb",picture);
                                             userdatamap.put("token",deviceToken);
                                             userdatamap.put("upvotes","0");
+
+                                            SharedPreferences sharedPreferences = getSharedPreferences("token", MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                                            editor.putString("tokenId", deviceToken);
+                                            editor.apply();
+
                                             mDatabase.setValue(userdatamap).addOnCompleteListener(task12 -> {
                                                 if(task12.isSuccessful())
                                                 {
@@ -310,7 +323,6 @@ public class LoginActivity extends AppCompatActivity {
                                                 }
                                             });
                                         }).addOnFailureListener(e -> Toast.makeText(LoginActivity.this, "Error while generating Token", Toast.LENGTH_SHORT).show());
-
                             }
                         }
 
@@ -336,6 +348,11 @@ public class LoginActivity extends AppCompatActivity {
     }
     public void updateToken(String namedata,String imagedata, String thumbdata, String statusdata, String tokendata, String upvotes)
     {
+        SharedPreferences sharedPreferences = getSharedPreferences("token", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        editor.putString("tokenId", tokendata);
+        editor.apply();
         HashMap<String, String> userdatamap = new HashMap<>();
         userdatamap.put("name", namedata);
         userdatamap.put("online","true");

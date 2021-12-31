@@ -7,7 +7,7 @@
     </item>
     <item android:top="200dp">
         <shape android:innerRadius="50dp" android:shape="rectangle" android:useLevel="true">
-            <solid android:color="@android:color/white" />
+            <solid android:color="@color/profileBgColor" />
             <corners
                 android:bottomLeftRadius="0dp"
                 android:topLeftRadius="160dp"

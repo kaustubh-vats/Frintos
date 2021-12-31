@@ -7,4 +7,5 @@
     <color name="grey">#303030</color>
     <color name="chatBubble">#a0a0a0</color>
     <color name="opacityDark">#99f093fb</color>
+    <color name="profileBgColor">#FFFFFF</color>
 </resources>

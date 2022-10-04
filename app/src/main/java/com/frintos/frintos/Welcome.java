@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -36,6 +38,8 @@ public class Welcome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         SharedPreferences sharedPreferences = getSharedPreferences("dark mode", MODE_PRIVATE);
         String nightMode = sharedPreferences.getString("dark mode enabled", "undefined");
+        String versionName = BuildConfig.VERSION_NAME;
+
         if(nightMode.equals("yes"))
         {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -74,14 +78,21 @@ public class Welcome extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String dataname=dataSnapshot.child("name").getValue().toString();
-                tokenFromFirebase = dataSnapshot.child("token").getValue().toString();
+                String dataname = "Frintos User";
+                tokenFromFirebase = "NotAbleToGet";
+                if(dataSnapshot.child("name").exists()) {
+                    dataname = dataSnapshot.child("name").getValue().toString();
+                }
+                if(dataSnapshot.child("token").exists()) {
+                    tokenFromFirebase = dataSnapshot.child("token").getValue().toString();
+                }
                 if(dataname.length() > 12) {
                     dataname = dataname.substring(0, 12);
                     dataname += "...";
                 }
                 String newWelcomeStr = "Welcome, "+dataname+" My Friend";
                 textView.setText(newWelcomeStr);
+                callHandler();
             }
 
             @Override
@@ -89,6 +100,9 @@ public class Welcome extends AppCompatActivity {
                 Log.d("read error","Error while reading database");
             }
         });
+    }
+
+    private void callHandler() {
         int TIME_OUT = 2000;
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if(tokenFromFirebase.equals(tokenFromSharedPref))
@@ -112,4 +126,5 @@ public class Welcome extends AppCompatActivity {
             }
         }, TIME_OUT);
     }
+
 }

@@ -39,22 +39,34 @@
                 android:id="@+id/textView22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
                 android:layout_marginStart="15dp"
+                android:layout_toEndOf="@+id/imageView10"
                 android:fontFamily="@font/baumans"
                 android:maxWidth="220dp"
                 android:maxLines="1"
                 android:text="@string/username"
                 android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
-                android:layout_toEndOf="@+id/imageView10"
-                android:layout_toStartOf="@+id/imageView11"
-                android:layout_alignParentTop="true"/>
+                android:textSize="20sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:id="@+id/imageView17"
+                android:layout_toEndOf="@id/textView22"
+                android:src="@drawable/verified"
+                android:visibility="invisible"
+                android:layout_alignTop="@id/textView22"
+                android:layout_alignBottom="@id/textView22"
+                android:adjustViewBounds="true"
+                android:layout_marginStart="8dp"/>
 
             <TextView
                 android:id="@+id/textView23"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
+                android:layout_toStartOf="@+id/imageView11"
                 android:fadingEdge="horizontal"
                 android:focusableInTouchMode="true"
                 android:marqueeRepeatLimit="marquee_forever"
@@ -115,11 +127,11 @@
             android:hint="@string/type_a_message"
             android:importantForAutofill="no"
             android:inputType="textMultiLine|textCapSentences"
-            android:maxLines="5"
             android:maxHeight="120dp"
+            android:maxLines="5"
             android:minHeight="48dp"
-            android:padding="8dp"
-            android:paddingHorizontal="10dp" />
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="20dp" />
 
         <ImageButton
             android:id="@+id/imageButton4"
@@ -127,12 +139,13 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:minHeight="48dp"
             android:adjustViewBounds="true"
             android:autofillHints="Enter Your Text here..."
             android:background="@drawable/buttonbg"
             android:contentDescription="@string/send_message_button"
+            android:minHeight="48dp"
             android:onClick="sendText"
+            android:layout_gravity="center"
             android:padding="20dp"
             app:srcCompat="@drawable/ic_baseline_send_24" />
 

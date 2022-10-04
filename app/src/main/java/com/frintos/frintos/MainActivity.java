@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         final DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault());
         Date date = new Date();
-        databaseReference.child("online").setValue(dateFormat.format(date)).addOnCompleteListener(task -> {
+        databaseReference.child("online").setValue(ServerValue.TIMESTAMP).addOnCompleteListener(task -> {
             if(task.isSuccessful())
             {
                 mAuth.signOut();

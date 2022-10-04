@@ -4,11 +4,13 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -19,22 +21,31 @@ import com.bumptech.glide.request.RequestOptions;
 import com.frintos.frintos.ChatActivity;
 import com.frintos.frintos.Model.MyUserData;
 import com.frintos.frintos.R;
+import com.frintos.frintos.Utility.VerifiedUsers;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.MyOnViewHolder> {
 
     ArrayList<MyUserData> usersArrayList;
     Context context;
+    VerifiedUsers verifiedUsers;
 
-    public MyRecyclerAdapter(ArrayList<MyUserData> usersArrayList, Context context) {
+    public MyRecyclerAdapter(ArrayList<MyUserData> usersArrayList, VerifiedUsers verifiedUsers, Context context) {
         this.usersArrayList = usersArrayList;
         this.context = context;
+        this.verifiedUsers = verifiedUsers;
     }
 
     @NonNull
@@ -53,6 +64,20 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
                 .placeholder(R.drawable.ic_account_circle_black_24dp)
                 .error(R.drawable.ic_account_circle_black_24dp);
         Glide.with(context.getApplicationContext()).load(ud.getThumb()).apply(options).into(holder.imageView);
+        if(verifiedUsers.isVerified(ud.getUid())){
+            int nightModeFlags = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            switch (nightModeFlags) {
+                case Configuration.UI_MODE_NIGHT_YES:
+                    holder.imageViewVerified.setImageResource(R.drawable.verified_night);
+                    break;
+                case Configuration.UI_MODE_NIGHT_NO:
+                    holder.imageViewVerified.setImageResource(R.drawable.verified);
+                    break;
+            }
+            holder.imageViewVerified.setVisibility(View.VISIBLE);
+        } else {
+            holder.imageViewVerified.setVisibility(View.GONE);
+        }
         if(ud.getOnline().equals("true"))
         {
             holder.textView1.setText(context.getString(R.string.active));
@@ -73,7 +98,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault());
             Date date = new Date();
             try {
-                Date date1 = dateFormat.parse(ud.getOnline());
+                Date date1 = new Date(Long.parseLong(ud.getOnline().toString()));
                 long diff = 0;
                 if (date1 != null) {
                     diff = date.getTime() - date1.getTime();
@@ -137,9 +162,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
                     lastsn = ud.getOnline();
                 }
                 holder.textView1.setText(String.format("Last seen %s", lastsn));
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 holder.textView1.setText(String.format("Last seen at: %s", ud.getOnline()));
-                e.printStackTrace();
             }
             holder.imageView1.setVisibility(View.INVISIBLE);
         }
@@ -157,8 +181,9 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
 
     class MyOnViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView textView,textView1;
-        ImageView imageView,imageView1;
+        ImageView imageView,imageView1,imageViewVerified;
         CardView cardView;
+
         public MyOnViewHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
@@ -167,6 +192,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
             imageView=itemView.findViewById(R.id.imageView5);
             cardView=itemView.findViewById(R.id.cardView);
             imageView1=itemView.findViewById(R.id.imageView8);
+            imageViewVerified = itemView.findViewById(R.id.imageView18);
         }
 
         @Override
@@ -180,6 +206,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
             intent.putExtra("uid",myUserData.getUid());
             intent.putExtra("picture",myUserData.getPicture());
             intent.putExtra("thumb",myUserData.getThumb());
+            intent.putExtra("verified", verifiedUsers.isVerified(usersArrayList.get(position).getUid()));
             context.startActivity(intent);
         }
     }

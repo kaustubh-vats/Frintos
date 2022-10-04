@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -59,7 +60,7 @@ public class TossWritingActivity extends AppCompatActivity {
                             usersData ud = ds.getValue(usersData.class);
                             MyUserData myUserData=new MyUserData();
                             myUserData.setStatus(ud.getStatus());
-                            myUserData.setOnline(ud.getOnline());
+                            myUserData.setOnline(ud.getOnline().toString());
                             myUserData.setUid(ds.getKey());
                             myUserData.setUpvotes(ud.getUpvotes());
                             myUserData.setToken(ud.getToken());
@@ -113,7 +114,7 @@ public class TossWritingActivity extends AppCompatActivity {
         tossMap.put("reported", false);
         tossReference.child(myUserData.getUid()).child(myUid).setValue(tossMap).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(TossWritingActivity.this, "Toast has been send\n Receiver: " + myUserData.getName() + "\nLast seen on: " + myUserData.getOnline(), Toast.LENGTH_LONG).show();
+                Toast.makeText(TossWritingActivity.this, "Toast has been send\n Receiver: " + myUserData.getName() + "\nLast seen on: " + getLastSeen(myUserData.getOnline()), Toast.LENGTH_LONG).show();
                 button.setEnabled(true);
                 progressBar.setVisibility(View.INVISIBLE);
             } else {
@@ -122,5 +123,18 @@ public class TossWritingActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.INVISIBLE);
             }
         });
+    }
+
+    private String getLastSeen(String online) {
+        if(online.equals("true")){
+            return "Active Now";
+        } else if (online.equals("false")){
+            return "User need to update the app";
+        } else if (online.equals("hidden")){
+            return "hidden";
+        } else {
+            Date date1 = new Date(Long.parseLong(online.toString()));
+            return date1.toString();
+        }
     }
 }

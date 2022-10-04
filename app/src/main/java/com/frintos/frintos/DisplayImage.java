@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -135,8 +136,9 @@ public class DisplayImage extends AppCompatActivity {
             DownloadManager.Request request=new DownloadManager.Request(Uri.parse(url));
             request.setDescription("Downloading profile picture");
             request.setTitle(filename);
+            request.setMimeType("image/jpg");
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-            request.setDestinationInExternalPublicDir("/Frintos","/ProfilePictures/"+filename);
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES,"Frintos/FrintosProfilePictures/"+filename);
             DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
             downloadManager.enqueue(request);
             Toast.makeText(DisplayImage.this, "Started Downloading", Toast.LENGTH_SHORT).show();

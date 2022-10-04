@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.frintos.frintos.Model.MyUserData;
 import com.frintos.frintos.Model.usersData;
 import com.frintos.frintos.RecyclerAdapter.MyRecyclerAdapter;
+import com.frintos.frintos.Utility.VerifiedUsers;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +36,7 @@ public class ChatsFragment extends Fragment {
     ArrayList<MyUserData> usersDataList;
     ProgressBar progressBar;
     View view;
+    VerifiedUsers verifiedUsers;
     public ChatsFragment() {
         // Required empty public constructor
     }
@@ -88,12 +90,12 @@ public class ChatsFragment extends Fragment {
                                         MyUserData myUserData = new MyUserData();
                                         if (ud != null) {
                                             myUserData.setName(ud.getName());
-
-                                            myUserData.setOnline(ud.getOnline());
+                                            myUserData.setOnline(ud.getOnline().toString());
                                             myUserData.setPicture(ud.getPicture());
                                             myUserData.setThumb(ud.getThumb());
-                                            if (lastmsg.equals(""))
-                                                myUserData.setStatus(ud.getOnline());
+                                            if (lastmsg.equals("")) {
+                                                myUserData.setStatus(ud.getOnline().toString());
+                                            }
                                             else
                                                 myUserData.setStatus(lastmsg);
                                             myUserData.setToken(ud.getToken());
@@ -137,8 +139,13 @@ public class ChatsFragment extends Fragment {
 
     private void setView(ArrayList<MyUserData> usersDataList, View view) {
         progressBar.setVisibility(View.INVISIBLE);
-        MyRecyclerAdapter myRecyclerAdapter = new MyRecyclerAdapter(usersDataList,view.getContext());
-        recyclerView.setAdapter(myRecyclerAdapter);
-        textView.setVisibility(View.INVISIBLE);
+        verifiedUsers = new VerifiedUsers(view.getContext()){
+            @Override
+            protected void onFetched(boolean success){
+                MyRecyclerAdapter myRecyclerAdapter = new MyRecyclerAdapter(usersDataList, verifiedUsers, view.getContext());
+                recyclerView.setAdapter(myRecyclerAdapter);
+                textView.setVisibility(View.INVISIBLE);
+            }
+        };
     }
 }

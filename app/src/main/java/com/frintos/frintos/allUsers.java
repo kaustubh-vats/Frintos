@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.frintos.frintos.Model.MyUserData;
 import com.frintos.frintos.Model.usersData;
 import com.frintos.frintos.RecyclerAdapter.AdapterClass;
+import com.frintos.frintos.Utility.VerifiedUsers;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,6 +38,7 @@ public class allUsers extends AppCompatActivity {
     EditText editText;
     RecyclerView recyclerView;
     ArrayList<MyUserData> usersDataList;
+    VerifiedUsers verifiedUsers;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +71,7 @@ public class allUsers extends AppCompatActivity {
                             MyUserData myUserData=new MyUserData();
                             if (ud != null) {
                                 myUserData.setName(ud.getName());
-                                myUserData.setOnline(ud.getOnline());
+                                myUserData.setOnline(ud.getOnline().toString());
                                 myUserData.setPicture(ud.getPicture());
                                 myUserData.setThumb(ud.getThumb());
                                 myUserData.setStatus(ud.getStatus());
@@ -112,7 +114,12 @@ public class allUsers extends AppCompatActivity {
         }
         progressBar.setVisibility(View.INVISIBLE);
         imageButton.setEnabled(true);
-        AdapterClass adapterClass = new AdapterClass(mUsersDataList,allUsers.this);
-        recyclerView.setAdapter(adapterClass);
+        verifiedUsers = new VerifiedUsers(allUsers.this){
+            @Override
+            protected void onFetched(boolean success){
+                AdapterClass adapterClass = new AdapterClass(mUsersDataList,allUsers.this, verifiedUsers);
+                recyclerView.setAdapter(adapterClass);
+            }
+        };
     }
 }

@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.frintos.frintos.DisplayThisUser;
 import com.frintos.frintos.Model.TossModel;
 import com.frintos.frintos.R;
+import com.frintos.frintos.Utility.VerifiedUsers;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +30,7 @@ public class TossAdaptor extends RecyclerView.Adapter<TossAdaptor.MyViewOnHolder
     Context context;
     List<TossModel> tossModels;
     String myuid;
+    VerifiedUsers verifiedUsers;
 
     public TossAdaptor(Context context, List<TossModel> tossModels, String myUid) {
         this.context = context;
@@ -127,9 +129,16 @@ public class TossAdaptor extends RecyclerView.Adapter<TossAdaptor.MyViewOnHolder
             } else if (id == R.id.imageButton7) {
                 DeleteUser(v, tossModel.getSender_id(), pos);
             } else if (id == R.id.imageView13) {
-                Intent intent = new Intent(context, DisplayThisUser.class);
-                intent.putExtra("uid", tossModel.getSender_id());
-                context.startActivity(intent);
+                verifiedUsers = new VerifiedUsers(context){
+                    @Override
+                    protected void onFetched(boolean success){
+                        String uid = tossModel.getSender_id();
+                        Intent intent = new Intent(context, DisplayThisUser.class);
+                        intent.putExtra("uid", uid);
+                        intent.putExtra("verified", verifiedUsers.isVerified(uid));
+                        context.startActivity(intent);
+                    }
+                };
             }
         }
 

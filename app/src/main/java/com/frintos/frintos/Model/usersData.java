@@ -9,7 +9,7 @@ public class usersData {
     String token;
     String upvotes;
 
-    public usersData(String name,String online, String status, String picture, String thumb, String token, String upvotes) {
+    public usersData(String name, String online, String status, String picture, String thumb, String token, String upvotes) {
         this.name = name;
         this.online = online;
         this.status = status;
@@ -17,6 +17,19 @@ public class usersData {
         this.thumb = thumb;
         this.token = token;
         this.upvotes = upvotes;
+    }
+
+    public usersData(String name, Long online, String status, String picture, String thumb, String token, String upvotes) {
+        this.name = name;
+        this.status = status;
+        this.picture = picture;
+        this.thumb = thumb;
+        this.token = token;
+        this.upvotes = upvotes;
+        if(online == 1) this.online = "true";
+        else if(online == 0) this.online = "false";
+        else if(online == -1) this.online = "hidden";
+        else this.online = online.toString();
     }
 
     public usersData() {
@@ -74,7 +87,19 @@ public class usersData {
         return online;
     }
 
-    public void setOnline(String online) {
-        this.online = online;
+    public void setOnline(Object online) {
+        if(online == null) {
+            this.online = "false";
+            return;
+        }
+        if(online instanceof Long){
+            Long myOnline = (Long)online;
+            if(myOnline == 1) this.online = "true";
+            else if(myOnline == 0) this.online = "false";
+            else if(myOnline == -1) this.online = "hidden";
+            else this.online = myOnline.toString();
+        } else {
+            this.online = (String) online.toString();
+        }
     }
 }

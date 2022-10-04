@@ -7,18 +7,24 @@
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/drawable/button_dark_theme.xml" value="0.290625" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/drawable/button_light_theme.xml" value="0.290625" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/drawable/chat_bg_1.xml" value="0.16041666666666668" />
+        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/drawable/chat_bg_1_mid.xml" value="0.2035" />
+        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/drawable/chat_bg_1_start.xml" value="0.2035" />
+        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/drawable/chat_bg_mid.xml" value="0.2035" />
+        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/drawable/chat_bg_start.xml" value="0.2035" />
+        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/drawable/date_container_bg.xml" value="0.256" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/drawable/edittextbg.xml" value="0.16041666666666668" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/drawable/edittextbg_chat.xml" value="0.290625" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/drawable/message_bg.xml" value="0.16041666666666668" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/drawable/profile_bg.xml" value="0.16041666666666668" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/drawable/toss_card.xml" value="0.1453125" />
-        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout-land-v23/activity_login.xml" value="0.12169312169312169" />
+        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/drawable/verified_day.xml" value="0.171" />
+        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout-land-v23/activity_login.xml" value="0.176" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout-land/activity_login.xml" value="0.23236331569664903" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout-land/activity_otpcheck.xml" value="0.2" />
-        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout-v23/activity_login.xml" value="0.14375" />
+        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout-v23/activity_login.xml" value="0.2" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout-v23/activity_otpcheck.xml" value="0.14375" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/activity_all_users.xml" value="0.4" />
-        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/activity_chat.xml" value="0.176" />
+        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/activity_chat.xml" value="0.264" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/activity_display_image.xml" value="0.14427083333333332" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/activity_display_this_user.xml" value="0.2" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/activity_display_user.xml" value="0.176" />
@@ -27,14 +33,15 @@
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/activity_otpcheck.xml" value="0.14427083333333332" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/activity_toss_writing.xml" value="0.14427083333333332" />
-        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/activity_wallpaper.xml" value="0.14583333333333334" />
+        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/activity_wallpaper.xml" value="0.264" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/activity_welcome.xml" value="0.14427083333333332" />
-        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/chat_layout.xml" value="0.14427083333333332" />
-        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/chat_layout_1.xml" value="0.14427083333333332" />
+        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/chat_layout.xml" value="0.4" />
+        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/chat_layout_1.xml" value="0.4" />
+        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/fragment_chats.xml" value="0.16302083333333334" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/fragment_request.xml" value="0.14375" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/toolbar.xml" value="0.14427083333333332" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/toss_template.xml" value="0.14427083333333332" />
-        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/user_card.xml" value="0.14427083333333332" />
+        <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/layout/user_card.xml" value="0.2" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/menu/chat_menu.xml" value="0.13645833333333332" />
         <entry key="..\:/Users/KAUSTUBH/AndroidStudioProjects/Frintos/app/src/main/res/menu/menu_list.xml" value="0.13645833333333332" />
       </map>

@@ -14,9 +14,10 @@
         android:layout_height="wrap_content"
         android:maxWidth="280dp"
         android:background="@drawable/chat_bg_1"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateRelativeLayout1"
         app:layout_constraintEnd_toEndOf="parent"
-        android:padding="14dp"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="8dp"
         android:elevation="2dp"
         android:text="@string/chat_message" />
 
@@ -26,6 +27,30 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/darker_gray"
         android:text="@string/time"
+        android:textSize="11dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/textView20" />
+
+    <RelativeLayout
+        android:id="@+id/dateRelativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingVertical="8dp"
+        android:visibility="gone"
+        >
+        <TextView
+            android:id="@+id/textView311"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date_format"
+            android:textSize="11sp"
+            android:layout_centerInParent="true"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="12dp"
+            android:background="@drawable/date_container_bg" />
+
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

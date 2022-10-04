@@ -2,6 +2,8 @@ package com.frintos.frintos;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -28,11 +30,12 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class DisplayThisUser extends AppCompatActivity {
-    ImageView imageView,imageView1;
+    ImageView imageView,imageView1,imageViewVerified;
     TextView textView,textView1,textView2,textView3;
     ProgressBar progressBar,progressBar1,progressBar2;
     Button button,button1;
     String name,status,picture,upvotes,uid,currState,curUid,online;
+    boolean isVerified;
     usersData userd;
     DatabaseReference databaseReference, friendRequestRefrence, friendRefrence;
     FirebaseUser firebaseUser;
@@ -42,6 +45,7 @@ public class DisplayThisUser extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         setContentView(R.layout.activity_display_this_user);
         uid=getIntent().getStringExtra("uid");
+        isVerified=getIntent().getBooleanExtra("verified", false);
         imageView=findViewById(R.id.imageView7);
         imageView1=findViewById(R.id.imageView4);
         textView2=findViewById(R.id.textView15);
@@ -52,8 +56,23 @@ public class DisplayThisUser extends AppCompatActivity {
         textView1=findViewById(R.id.textView10);
         progressBar=findViewById(R.id.progressBar5);
         progressBar1=findViewById(R.id.progressBar6);
+        imageViewVerified=findViewById(R.id.imageView19);
         progressBar1.setVisibility(View.INVISIBLE);
         progressBar2.setVisibility(View.INVISIBLE);
+        if(isVerified) {
+            int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            switch (nightModeFlags) {
+                case Configuration.UI_MODE_NIGHT_YES:
+                    imageViewVerified.setImageResource(R.drawable.verified_night);
+                    break;
+                case Configuration.UI_MODE_NIGHT_NO:
+                    imageViewVerified.setImageResource(R.drawable.verified);
+                    break;
+            }
+            imageViewVerified.setVisibility(View.VISIBLE);
+        } else {
+            imageViewVerified.setVisibility(View.INVISIBLE);
+        }
         currState="notFriends";
         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         curUid=FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -126,7 +145,7 @@ public class DisplayThisUser extends AppCompatActivity {
                 userd=snapshot.getValue(usersData.class);
                 if (userd != null) {
                     picture = userd.getPicture();
-                    online = userd.getOnline();
+                    online=userd.getOnline().toString();
                     upvotes = userd.getUpvotes();
                     name = userd.getName();
                     status = userd.getStatus();

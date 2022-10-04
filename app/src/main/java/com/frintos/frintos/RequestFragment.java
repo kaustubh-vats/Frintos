@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.frintos.frintos.Model.MyUserData;
 import com.frintos.frintos.Model.usersData;
 import com.frintos.frintos.RecyclerAdapter.AdapterClass;
+import com.frintos.frintos.Utility.VerifiedUsers;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +36,7 @@ public class RequestFragment extends Fragment {
     TextView textView;
     View view;
     ArrayList<MyUserData> usersDataList;
+    VerifiedUsers verifiedUsers;
 
     public RequestFragment() {
         // Required empty public constructor
@@ -64,6 +66,7 @@ public class RequestFragment extends Fragment {
                 usersDataList=new ArrayList<>();
                 if(snapshot.exists())
                 {
+                    System.out.println("snapshot exist");
                     for(DataSnapshot ds: snapshot.getChildren())
                     {
                         if(Objects.requireNonNull(ds.child("type").getValue(),"No Value Found as name type").toString().equals("received"))
@@ -80,7 +83,7 @@ public class RequestFragment extends Fragment {
                                             myUserData.setName(ud.getName());
                                             myUserData.setPicture(ud.getPicture());
                                             myUserData.setThumb(ud.getThumb());
-                                            myUserData.setOnline(ud.getOnline());
+                                            myUserData.setOnline(ud.getOnline().toString());
                                             myUserData.setStatus(ud.getStatus());
                                             myUserData.setToken(ud.getToken());
                                             myUserData.setUpvotes(ud.getUpvotes());
@@ -105,6 +108,7 @@ public class RequestFragment extends Fragment {
                 }
                 else
                 {
+                    System.out.println("No snapshot exist");
                     progressBar.setVisibility(View.INVISIBLE);
                     setView(usersDataList,view);
                     textView.setVisibility(View.VISIBLE);
@@ -121,8 +125,14 @@ public class RequestFragment extends Fragment {
 
     private void setView(ArrayList<MyUserData> usersDataList, View view) {
         progressBar.setVisibility(View.INVISIBLE);
-        AdapterClass adapterClass = new AdapterClass(usersDataList,view.getContext());
-        recyclerView.setAdapter(adapterClass);
-        textView.setVisibility(View.INVISIBLE);
+        verifiedUsers = new VerifiedUsers(view.getContext()){
+            @Override
+            protected void onFetched(boolean success){
+                if(!usersDataList.isEmpty())
+                    textView.setVisibility(View.INVISIBLE);
+                AdapterClass adapterClass = new AdapterClass(usersDataList,view.getContext(),verifiedUsers);
+                recyclerView.setAdapter(adapterClass);
+            }
+        };
     }
 }

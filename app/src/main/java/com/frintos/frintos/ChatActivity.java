@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
@@ -35,6 +36,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.frintos.frintos.Model.ChatModel;
 import com.frintos.frintos.Model.GetchatData;
 import com.frintos.frintos.Model.MyUserData;
+import com.frintos.frintos.Model.WallpaperModel;
 import com.frintos.frintos.Model.usersData;
 import com.frintos.frintos.RecyclerAdapter.ChatAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -63,7 +65,7 @@ import java.util.Objects;
 
 
 public class ChatActivity extends AppCompatActivity {
-    ImageView imageView, imageView1,imageView2, bgimage;
+    ImageView imageView, imageView1,imageView2, bgimage, imageViewVerified;
     TextView textView, textView1;
     String name, picture, online, status, uid, thumb;
     DatabaseReference chatRefrence;
@@ -71,11 +73,15 @@ public class ChatActivity extends AppCompatActivity {
     EditText editText;
     RecyclerView recyclerView;
     Toolbar toolbar;
-    DatabaseReference databaseReference;
+    DatabaseReference databaseReference, wallpaperReference, localReference;
     String myuid;
     ProgressBar progressBar;
     List<ChatModel> messageList = new ArrayList<>();
     ChatAdapter chatAdapter;
+    boolean verified;
+    WallpaperModel wallpaperModel;
+    int currModeImage;
+    String currUserName, currUserImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +95,9 @@ public class ChatActivity extends AppCompatActivity {
         picture=intent.getStringExtra("picture");
         status=intent.getStringExtra("status");
         online=intent.getStringExtra("online");
+        verified=intent.getBooleanExtra("verified", false);
+        currUserName = "Frintos";
+        currUserImage = "default";
         bgimage = findViewById(R.id.imageView14);
         progressBar=findViewById(R.id.progressBar12);
         imageView=findViewById(R.id.imageView10);
@@ -98,8 +107,10 @@ public class ChatActivity extends AppCompatActivity {
         textView1=findViewById(R.id.textView23);
         imageView2=findViewById(R.id.imageView12);
         editText=findViewById(R.id.editTextTextMultiLine);
+        imageViewVerified=findViewById(R.id.imageView17);
         toolbar=findViewById(R.id.constraintLayout4);
         toolbar.setTitle("");
+        currModeImage = R.drawable.chat_bg_light_default;
         setSupportActionBar(toolbar);
         databaseReference=FirebaseDatabase.getInstance().getReference().child("users");
         textView1.setSelected(true);
@@ -114,9 +125,24 @@ public class ChatActivity extends AppCompatActivity {
         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         chatRefrence= FirebaseDatabase.getInstance().getReference();
         myuid = firebaseUser.getUid();
+        wallpaperReference =  FirebaseDatabase.getInstance().getReference().child("wallpapers").child(myuid).child(uid);
+        localReference = FirebaseDatabase.getInstance().getReference().child("local_wallpaper").child(myuid).child(uid);
         chatAdapter=new ChatAdapter(ChatActivity.this, messageList);
         recyclerView.setAdapter(chatAdapter);
-
+        if(verified) {
+            int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            switch (nightModeFlags) {
+                case Configuration.UI_MODE_NIGHT_YES:
+                    imageViewVerified.setImageResource(R.drawable.verified_night);
+                    break;
+                case Configuration.UI_MODE_NIGHT_NO:
+                    imageViewVerified.setImageResource(R.drawable.verified);
+                    break;
+            }
+            imageViewVerified.setVisibility(View.VISIBLE);
+        } else {
+            imageViewVerified.setVisibility(View.INVISIBLE);
+        }
         switch (online) {
             case "true":
                 textView1.setText(R.string.active);
@@ -201,11 +227,13 @@ public class ChatActivity extends AppCompatActivity {
                 myUserData.setName(ud.getName());
                 myUserData.setPicture(ud.getPicture());
                 myUserData.setThumb(ud.getThumb());
-                myUserData.setOnline(ud.getOnline());
+                myUserData.setOnline(ud.getOnline().toString());
                 myUserData.setStatus(ud.getStatus());
                 myUserData.setToken(ud.getToken());
                 myUserData.setUpvotes(ud.getUpvotes());
                 myUserData.setUid(uid);
+                currUserName = ud.getName();
+                currUserImage = ud.getThumb();
                 setView(myUserData);
             }
             @Override
@@ -216,6 +244,7 @@ public class ChatActivity extends AppCompatActivity {
         toolbar.setOnClickListener(v -> {
             Intent intent1 = new Intent(ChatActivity.this, DisplayThisUser.class);
             intent1.putExtra("uid",uid);
+            intent1.putExtra("verified", verified);
             startActivity(intent1);
         });
         imageView.setOnClickListener(v -> {
@@ -439,9 +468,11 @@ public class ChatActivity extends AppCompatActivity {
         switch (nightModeFlags)
         {
             case Configuration.UI_MODE_NIGHT_YES:
+                currModeImage = R.drawable.chat_bg_dark_default;
                 bgimage.setImageResource(R.drawable.chat_bg_dark_default);
                 break;
             case Configuration.UI_MODE_NIGHT_NO:
+                currModeImage = R.drawable.chat_bg_light_default;
                 bgimage.setImageResource(R.drawable.chat_bg_light_default);
                 break;
         }
@@ -465,12 +496,79 @@ public class ChatActivity extends AppCompatActivity {
         {
             try {
                 FileInputStream fileInputStream = new FileInputStream(imagefile);
-                bgimage.setImageBitmap(BitmapFactory.decodeStream(fileInputStream));
+                Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
+                Glide.with(getApplicationContext())
+                        .load(bitmap)
+                        .fitCenter()
+                        .centerCrop()
+                        .into(bgimage);
             } catch (IOException e) {
                 e.printStackTrace();
                 Toast.makeText(ChatActivity.this, "Failed to load image", Toast.LENGTH_SHORT).show();
             }
 
+        }
+        myuid = firebaseUser.getUid();
+        wallpaperReference =  FirebaseDatabase.getInstance().getReference().child("wallpapers").child(myuid).child(uid);
+        wallpaperReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    try{
+                        wallpaperModel = snapshot.getValue(WallpaperModel.class);
+                        if(wallpaperModel != null) {
+                            changeImageBgFromUrl(wallpaperModel.getUrl(), wallpaperModel.getTimestamp());
+                        } else {
+                            Toast.makeText(ChatActivity.this, "Image not found", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e){
+                        Toast.makeText(ChatActivity.this, "Failed to fetch data from server", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void changeImageBgFromUrl(String url, Long timestamp) {
+        localReference = FirebaseDatabase.getInstance().getReference().child("local_wallpaper").child(myuid).child(uid);
+        localReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    try {
+                        if(snapshot.hasChild("timestamp")) {
+                            Long ts = snapshot.child("timestamp").getValue(Long.class);
+                            if (ts==null || timestamp > ts) {
+                                changeWallpaperFromUrl(url);
+                            }
+                        }
+                    } catch (Exception e){
+                        changeWallpaperFromUrl(url);
+                    }
+                } else {
+                    changeWallpaperFromUrl(url);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Do nothing
+            }
+        });
+    }
+
+    private void changeWallpaperFromUrl(String url) {
+        if(!url.equals("localImage")) {
+            RequestOptions options = new RequestOptions()
+                    .fitCenter()
+                    .centerCrop()
+                    .placeholder(currModeImage)
+                    .error(currModeImage);
+            Glide.with(this.getApplicationContext()).load(url).apply(options).into(bgimage);
         }
     }
 
@@ -487,6 +585,9 @@ public class ChatActivity extends AppCompatActivity {
         {
             Intent wallpaperIntent = new Intent(ChatActivity.this,WallpaperActivity.class);
             wallpaperIntent.putExtra("uid",uid);
+            wallpaperIntent.putExtra("myUid", myuid);
+            wallpaperIntent.putExtra("profileImage", currUserImage);
+            wallpaperIntent.putExtra("username", currUserName);
             startActivity(wallpaperIntent);
         }
         return super.onOptionsItemSelected(item);
@@ -518,10 +619,10 @@ public class ChatActivity extends AppCompatActivity {
                 textView1.setText(String.format("%s need to to update the app", name));
                 break;
             default:
-                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss",Locale.getDefault());
+                //DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss",Locale.getDefault());
                 Date date = new Date();
                 try {
-                    Date date1 = dateFormat.parse(online);
+                    Date date1 = new Date(Long.parseLong(online));
                     long diff = date.getTime() - date1.getTime();
                     String dayName = (String) android.text.format.DateFormat.format("EEEE", date1);
                     float numOfDayPass = diff / 86400000.0f;
@@ -569,9 +670,8 @@ public class ChatActivity extends AppCompatActivity {
                         lastsn = online;
                     }
                     textView1.setText(String.format("Last seen %s", lastsn));
-                } catch (ParseException e) {
+                } catch (Exception e) {
                     textView1.setText(String.format("Last seen at: %s", online));
-                    e.printStackTrace();
                 }
                 break;
         }

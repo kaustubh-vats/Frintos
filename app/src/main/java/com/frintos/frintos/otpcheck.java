@@ -78,7 +78,7 @@ public class otpcheck extends AppCompatActivity {
                     String uid=user.getUid();
                     FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
                     mDatabase=firebaseDatabase.getReference().child("users").child(uid);
-                    mDatabase.addValueEventListener(new ValueEventListener() {
+                    mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()) {

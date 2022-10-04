@@ -44,7 +44,7 @@
     <string name="toss_hint">Enter your thoughts here&#8230; Share with random persons</string>
     <string name="send_toss">Send Toss</string>
     <string name="chat_background">Chat Background</string>
-    <string name="change_wallpaper">Change Wallpaper</string>
+    <string name="change_wallpaper">Select From Gallery</string>
     <string name="save_for_all_chats">Save For ALl Chats</string>
     <string name="save_for_this_chat">Save for This Chat</string>
     <string name="remove_background">Remove Background</string>
@@ -58,4 +58,6 @@
     <string name="error">ERROR</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="log_in_here_again">Log In here Again</string>
+    <string name="apply_for_both">Apply For both</string>
+    <string name="date_format">DD/MM/YYYY</string>
 </resources>

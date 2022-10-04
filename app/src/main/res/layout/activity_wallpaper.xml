@@ -18,28 +18,29 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:contentDescription="@string/display_image"
                 android:id="@+id/head_image"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/display_image"
                 app:srcCompat="@drawable/ic_account_circle_black_24dp" />
 
             <TextView
+                android:id="@+id/head_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_marginStart="15dp"
+                android:layout_toEndOf="@+id/head_image"
                 android:fontFamily="@font/baumans"
                 android:maxWidth="220dp"
+                android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@string/app_name"
                 android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/head_image"
-                />
+                android:textSize="20sp" />
 
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
@@ -50,18 +51,22 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:contentDescription="@string/chat_background"
             android:id="@+id/imageView15"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/chat_bg_light_default"
-            android:scaleType="centerCrop"/>
+            android:contentDescription="@string/chat_background"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/chat_bg_light_default" />
+
         <include
             android:id="@+id/received_message"
             layout="@layout/chat_layout"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_margin="5dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp" />
         <include
             android:id="@+id/sent_message"
             layout="@layout/chat_layout_1"
@@ -98,7 +103,7 @@
         android:text="@string/save_for_all_chats"
         android:textColor="@android:color/white"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/change_wallpaper"
+        android:layout_above="@+id/change_for_both"
         android:layout_margin="8dp"
         android:onClick="saveForAllChanges"
         android:id="@+id/save_for_all_changes"
@@ -119,20 +124,50 @@
         android:layout_above="@+id/save_for_all_changes"
         />
 
+
     <Button
-        android:id="@+id/change_wallpaper"
+        android:id="@+id/change_for_both"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingHorizontal="30dp"
         android:paddingVertical="4dp"
         android:background="@drawable/buttonbg"
-        android:text="@string/change_wallpaper"
+        android:text="@string/apply_for_both"
         android:textColor="@android:color/white"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
         android:layout_margin="8dp"
-        android:onClick="changeWallpaper"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:onClick="applyForBoth"
+        android:layout_above="@+id/change_wallpaper"
         />
 
+    <Button
+        android:id="@+id/change_wallpaper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/buttonbg"
+        android:onClick="changeWallpaper"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="4dp"
+        android:text="@string/change_wallpaper"
+        android:textColor="@android:color/white" />
+
+    <ProgressBar
+        android:id="@+id/progressBar13"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:elevation="10dp"
+        android:visibility="invisible"
+        />
 
 </RelativeLayout>

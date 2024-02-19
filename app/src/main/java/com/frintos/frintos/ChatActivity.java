@@ -334,7 +334,7 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                final int position = viewHolder.getAdapterPosition();
+                final int position = viewHolder.getBindingAdapterPosition();
                 final String messageId = messageList.get(position).getMessageId();
                 String fromId = messageList.get(position).getFrom();
                 if(myuid.equals(fromId))
@@ -426,7 +426,7 @@ public class ChatActivity extends AppCompatActivity {
                                     {
                                         progressBar.setVisibility(View.INVISIBLE);
                                         imageView2.setEnabled(true);
-                                        chatAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                                        chatAdapter.notifyItemChanged(viewHolder.getBindingAdapterPosition());
                                         Toast.makeText(ChatActivity.this, "Failed to delete", Toast.LENGTH_SHORT).show();
                                     }
                                 });
@@ -435,16 +435,16 @@ public class ChatActivity extends AppCompatActivity {
                             {
                                 progressBar.setVisibility(View.INVISIBLE);
                                 imageView2.setEnabled(true);
-                                chatAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                                chatAdapter.notifyItemChanged(viewHolder.getBindingAdapterPosition());
                                 Toast.makeText(ChatActivity.this, "Failed to delete", Toast.LENGTH_SHORT).show();
                             }
                         });
                     });
                     builder.setNegativeButton("No", (dialog, which) -> {
-                        chatAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                        chatAdapter.notifyItemChanged(viewHolder.getBindingAdapterPosition());
                         dialog.cancel();
                     });
-                    builder.setOnCancelListener(dialog -> chatAdapter.notifyItemChanged(viewHolder.getAdapterPosition()));
+                    builder.setOnCancelListener(dialog -> chatAdapter.notifyItemChanged(viewHolder.getBindingAdapterPosition()));
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
                 }
@@ -452,7 +452,7 @@ public class ChatActivity extends AppCompatActivity {
                 {
                     progressBar.setVisibility(View.INVISIBLE);
                     imageView2.setEnabled(true);
-                    chatAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                    chatAdapter.notifyItemChanged(viewHolder.getBindingAdapterPosition());
                 }
             }
         };

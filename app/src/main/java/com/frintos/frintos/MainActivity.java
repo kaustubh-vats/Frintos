@@ -6,10 +6,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.frintos.frintos.FragmentAdaptor.SectionsPagerAdaptor;
@@ -109,15 +112,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()){
-            case R.id.account_settings: Intent intent = new Intent(MainActivity.this,DisplayUser.class);
-                                        startActivity(intent);
-                                        break;
-            case R.id.logout: logoutandclose();
-                              break;
-            case R.id.all_users: Intent intent1=new Intent(MainActivity.this,allUsers.class);
-                                 startActivity(intent1);
-                                 break;
+        int currItemId = item.getItemId();
+        if(R.id.account_settings == currItemId) {
+                Intent intent = new Intent(MainActivity.this, DisplayUser.class);
+                startActivity(intent);
+        } else if(R.id.logout == currItemId) {
+            logoutandclose();
+        } else if(R.id.all_users == currItemId) {
+            Intent intent1=new Intent(MainActivity.this,allUsers.class);
+            startActivity(intent1);
+        } else if(R.id.about_dev == currItemId) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+            startActivity(browserIntent);
         }
         return super.onOptionsItemSelected(item);
     }

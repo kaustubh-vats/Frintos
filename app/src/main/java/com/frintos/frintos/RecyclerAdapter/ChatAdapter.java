@@ -227,7 +227,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
             });
             textView.setOnClickListener(v -> {
                 Calendar calendar=Calendar.getInstance();
-                calendar.setTimeInMillis(chatModelList.get(getAdapterPosition()).getTimestamp());
+                calendar.setTimeInMillis(chatModelList.get(getBindingAdapterPosition()).getTimestamp());
                 String[] days={"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
                 String[] am_pm={"AM","PM"};
                 System.out.println(calendar.get(Calendar.DAY_OF_WEEK));

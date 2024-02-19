@@ -129,8 +129,8 @@ public class DisplayThisUser extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
                 {
-                    long frintcount=snapshot.getChildrenCount();
-                    textView2.setText(String.valueOf(frintcount));
+                    long frintCount=snapshot.getChildrenCount();
+                    textView2.setText(String.valueOf(frintCount));
                 }
             }
 

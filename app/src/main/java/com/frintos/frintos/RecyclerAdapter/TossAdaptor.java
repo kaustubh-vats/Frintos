@@ -119,7 +119,7 @@ public class TossAdaptor extends RecyclerView.Adapter<TossAdaptor.MyViewOnHolder
 
         @Override
         public void onClick(View v) {
-            int pos = getAdapterPosition();
+            int pos = getBindingAdapterPosition();
             TossModel tossModel = tossModels.get(pos);
             int id = v.getId();
             if (id == R.id.imageButton5) {

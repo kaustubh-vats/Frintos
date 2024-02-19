@@ -197,7 +197,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
 
         @Override
         public void onClick(View v) {
-            int position = getAdapterPosition();
+            int position = getBindingAdapterPosition();
             MyUserData myUserData = usersArrayList.get(position);
             Intent intent=new Intent(context, ChatActivity.class);
             intent.putExtra("name",myUserData.getName());

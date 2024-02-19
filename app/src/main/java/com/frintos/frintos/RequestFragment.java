@@ -66,7 +66,6 @@ public class RequestFragment extends Fragment {
                 usersDataList=new ArrayList<>();
                 if(snapshot.exists())
                 {
-                    System.out.println("snapshot exist");
                     for(DataSnapshot ds: snapshot.getChildren())
                     {
                         if(Objects.requireNonNull(ds.child("type").getValue(),"No Value Found as name type").toString().equals("received"))

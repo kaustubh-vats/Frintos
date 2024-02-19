@@ -88,7 +88,7 @@ public class AdapterClass extends RecyclerView.Adapter<AdapterClass.MyViewHolder
 
         @Override
         public void onClick(View v) {
-            int pos=this.getAdapterPosition();
+            int pos=this.getBindingAdapterPosition();
             String uid=usersArrayList.get(pos).getUid();
             Intent intent=new Intent(context,DisplayThisUser.class);
             intent.putExtra("uid",uid);

@@ -60,4 +60,6 @@
     <string name="log_in_here_again">Log In here Again</string>
     <string name="apply_for_both">Apply For both</string>
     <string name="date_format">DD/MM/YYYY</string>
+    <string name="find_frints">Find Frints</string>
+    <string name="about_developer">About Developer</string>
 </resources>

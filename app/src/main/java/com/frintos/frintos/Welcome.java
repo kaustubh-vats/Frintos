@@ -38,7 +38,7 @@ public class Welcome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         SharedPreferences sharedPreferences = getSharedPreferences("dark mode", MODE_PRIVATE);
         String nightMode = sharedPreferences.getString("dark mode enabled", "undefined");
-        String versionName = BuildConfig.VERSION_NAME;
+        // String versionName = BuildConfig.VERSION_NAME;
 
         if(nightMode.equals("yes"))
         {
@@ -59,7 +59,7 @@ public class Welcome extends AppCompatActivity {
         linearLayout=findViewById(R.id.linearLayout);
         Intent intent = getIntent();
         String name= intent.getStringExtra("name");
-        if(name.length() > 12){
+        if(name != null && name.length() > 12){
             name = name.substring(0,12);
             name+="...";
         }
@@ -75,7 +75,7 @@ public class Welcome extends AppCompatActivity {
         SharedPreferences sharedPreferences1 = getSharedPreferences("token", MODE_PRIVATE);
         tokenFromSharedPref = sharedPreferences1.getString("tokenId", "undefined");
         databaseReference.keepSynced(true);
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String dataname = "Frintos User";

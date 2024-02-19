@@ -5,7 +5,9 @@
         android:title="@string/account_settings"
         android:icon="@drawable/ic_account_circle_black_24dp"/>
     <item android:id="@+id/all_users"
-        android:title="Find Frints"/>
+        android:title="@string/find_frints"/>
+    <item android:id="@+id/about_dev"
+        android:title="@string/about_developer" />
 
     <item
         android:id="@+id/logout"

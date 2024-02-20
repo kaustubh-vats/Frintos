@@ -88,7 +88,6 @@ public class DisplayUser extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(DisplayUser.this, "Database Error", Toast.LENGTH_SHORT).show();
             }
         });
         imageView.setOnClickListener(v -> {

@@ -121,7 +121,6 @@ public class DisplayThisUser extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(DisplayThisUser.this, "Database error please try again", Toast.LENGTH_SHORT).show();
             }
         });
         friendRefrence.child(uid).addValueEventListener(new ValueEventListener() {
@@ -169,7 +168,6 @@ public class DisplayThisUser extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(DisplayThisUser.this, "Data base error occured", Toast.LENGTH_SHORT).show();
             }
         });
     }

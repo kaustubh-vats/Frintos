@@ -122,7 +122,10 @@ public class MainActivity extends AppCompatActivity {
             Intent intent1=new Intent(MainActivity.this,allUsers.class);
             startActivity(intent1);
         } else if(R.id.about_dev == currItemId) {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.kaustubhvats.in"));
+            startActivity(browserIntent);
+        } else if(R.id.privacy_policy == currItemId) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.kaustubhvats.in/frintosPrivacyPolicy"));
             startActivity(browserIntent);
         }
         return super.onOptionsItemSelected(item);

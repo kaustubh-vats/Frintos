@@ -8,7 +8,8 @@
         android:title="@string/find_frints"/>
     <item android:id="@+id/about_dev"
         android:title="@string/about_developer" />
-
+    <item android:id="@+id/privacy_policy"
+        android:title="@string/privacy_policy" />
     <item
         android:id="@+id/logout"
         android:title="@string/logout"

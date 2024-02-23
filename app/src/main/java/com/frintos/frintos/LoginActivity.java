@@ -13,7 +13,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,6 +23,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -61,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInClient googleSignInClient;
     String deviceToken;
     PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks;
+    TextView privacyPolicy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +74,16 @@ public class LoginActivity extends AppCompatActivity {
         editText1=findViewById(R.id.editText1);
         editText2=findViewById(R.id.ccp);
         button=findViewById(R.id.button);
+        privacyPolicy=findViewById(R.id.textView32);
         progressBar=findViewById(R.id.progressBar);
         currentUser=mAuth.getCurrentUser();
+        SpannableString content = new SpannableString(getString(R.string.privacy_policy));
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        privacyPolicy.setText(content);
+        privacyPolicy.setOnClickListener(view -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.kaustubhvats.in/frintosPrivacyPolicy"));
+            startActivity(browserIntent);
+        });
         editText1.setFocusableInTouchMode(true);
         editText.setOnEditorActionListener((v, actionId, event) -> {
             if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {

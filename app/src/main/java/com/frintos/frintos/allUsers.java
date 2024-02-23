@@ -88,7 +88,6 @@ public class allUsers extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(allUsers.this, "Got Some Error", Toast.LENGTH_SHORT).show();
             }
         });
         imageButton.setOnClickListener(v -> SearchFrint());

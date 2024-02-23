@@ -114,7 +114,7 @@ public class ChatActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         databaseReference=FirebaseDatabase.getInstance().getReference().child("users");
         textView1.setSelected(true);
-        recyclerView.setHasFixedSize(true);
+//        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         RequestOptions options = new RequestOptions()
                 .circleCrop()
